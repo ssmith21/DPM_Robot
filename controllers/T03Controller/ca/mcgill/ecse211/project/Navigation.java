@@ -23,8 +23,8 @@ public class Navigation {
    * Takes the green zone and the red zone into account when it wants to travel.
    * It considers 5 different cases:
    * Case 1: We're already at the destination.
-   * Case 3: We're facing the right way.
-   * Case 5: We have to turn.
+   * Case 2: We're facing the right way.
+   * Case 3: We have to turn.
    * @param destination the destination point
    */
   public static void travelTo(Point destination) {
@@ -40,12 +40,12 @@ public class Navigation {
       return;
     }
     
-    // case 2 : we're facing the right way
+    // case 2: we're facing the right way
     if (angleDiff < 5.0 || angleDiff > 355.0) {
       System.out.println("Already Pointing in the right direction, might have obstacles ahead.");
       travelToObstacle(destination);
       
-      // case 5 : we have to turn.
+      // case 3: we have to turn.
     } else {
       System.out.println("Destination might have obstacles ahead.");
       turnTo(destTheta);
