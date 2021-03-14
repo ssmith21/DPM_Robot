@@ -23,10 +23,8 @@ public class Navigation {
    * Takes the green zone and the red zone into account when it wants to travel.
    * It considers 5 different cases:
    * Case 1: We're already at the destination.
-   * Case 2: We're facing the right way and we know there won't be obstacles.
-   * Case 3: We're facing the right way and there might be obstacles.
-   * Case 4: We have to turn and we know there won't be obstacles.
-   * Case 5: We have to turn and there might be obstacles.
+   * Case 3: We're facing the right way.
+   * Case 5: We have to turn.
    * @param destination the destination point
    */
   public static void travelTo(Point destination) {
@@ -42,26 +40,12 @@ public class Navigation {
       return;
     }
     
-    // case 2 : we're facing the right way and we know there won't be obstacles
-    if ((angleDiff < 5.0 || angleDiff > 355.0)
-        && (pathInGreenZone(startPoint, destination))) {
-      System.out.println("Already Pointing in the right direction, no obstacles ahead.");
-      Movement.moveStraightFor(travelDist);
-      
-      // case 3 : we're facing the right way and there might be obstacles
-    } else if ((angleDiff < 5.0 || angleDiff > 355.0)
-        && (!pathInGreenZone(startPoint, destination))) {
+    // case 2 : we're facing the right way
+    if (angleDiff < 5.0 || angleDiff > 355.0) {
       System.out.println("Already Pointing in the right direction, might have obstacles ahead.");
       travelToObstacle(destination);
       
-      // case 4 : we have to turn and we know there won't be obstacles
-    } else if ((angleDiff >= 5.0 || angleDiff <= 355.0)
-        && (pathInGreenZone(startPoint, destination))) {
-      System.out.println("Destination has no obstacles ahead.");
-      turnTo(destTheta);
-      Movement.moveStraightFor(travelDist);
-      
-      // case 5 : we have to turn and there might be obstacles.
+      // case 5 : we have to turn.
     } else {
       System.out.println("Destination might have obstacles ahead.");
       turnTo(destTheta);
@@ -172,19 +156,6 @@ public class Navigation {
     double dySqr = Math.pow((p2.y - p1.y), 2);
     double dist = Math.sqrt(dxSqr + dySqr);
     return dist;
-  }
-  
-  /**
-   * Checks if the path between two points is in the green zone(no obstacles).
-   * @param start Starting point
-   * @param end Ending point
-   * @return true if it is in green zone
-   */
-  public static boolean pathInGreenZone(Point start, Point end) {
-    if (start.x <= 4 && end.x <= 4) {
-      return true;
-    }
-    return false;
   }
   
   /**
