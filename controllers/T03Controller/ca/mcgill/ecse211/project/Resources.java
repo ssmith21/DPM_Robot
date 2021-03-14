@@ -91,19 +91,49 @@ public class Resources {
   public static final double WHEEL_RAD = 0.021;
   
   /** The robot width in meters. */
-  public static final double BASE_WIDTH = 0;
+  public static final double BASE_WIDTH = 0.158;
   
   /** The speed at which the robot moves forward in degrees per second. */
-  public static final int FORWARD_SPEED = 0;
+  public static final int FORWARD_SPEED = 500;
   
   /** The speed at which the robot rotates in degrees per second. */
-  public static final int ROTATE_SPEED = 0;
+  public static final int ROTATE_SPEED = 200;
   
   /** The motor acceleration in degrees per second squared. */
-  public static final int ACCELERATION = 0;
+  public static final int ACCELERATION = 1000;
   
   /** Timeout period in milliseconds. */
   public static final int TIMEOUT_PERIOD = 3000;
+  
+  /** The ideal distance from left wall. */
+  public static final int WALL_DIST_LEFT = 15;
+  
+  /** The ideal distance from right wall. */
+  public static final int WALL_DIST_RIGHT = 12;
+  
+  /** The maximum tolerated deviation from the ideal wall distance, aka the deadband, in cm. */
+  public static final int WALL_DIST_ERR_THRESH = 0;
+  
+  /** Indicating left motor. */
+  public static final int LEFT = 0;
+  
+  /** Indicating right motor. */
+  public static final int RIGHT = 1;
+  
+  /** Speed of the faster rotating wheel (deg/sec). */
+  public static final int MOTOR_HIGH = 300;
+  
+  /** Speed of slower rotating wheel (deg/sec). */
+  public static final int MOTOR_LOW = 100;
+  
+  /** Threshold constant for rising and falling edge cases for the ultrasonic localizer. */
+  public static final int COMMON_D = 40;
+
+  /** Noise margin constant for falling edge ultrasonic localizer. */
+  public static final int FALLINGEDGE_K = 1;
+
+  /** Noise margin constant for rising edge ultrasonic localizer. */
+  public static final int RISINGEDGE_K = 3;
 
   // Hardware resources
 
@@ -112,6 +142,9 @@ public class Resources {
   
   /** The right motor. */
   public static final RegulatedMotor rightMotor = Motor.D;
+  
+  /** The ultrasonic motor. */
+  public static final RegulatedMotor usMotor = Motor.B;
   
   /** The ultrasonic sensor. */
   public static final EV3UltrasonicSensor usSensor = new EV3UltrasonicSensor(SensorPort.S1);
