@@ -2,7 +2,7 @@
 <!-- TODO Replace XX/xx with your team number everywhere in this file -->
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/dpm-project-txx/controllers/TXXController/TXXController.java"/>
+        <listEntry value="/dpm-project-t03/controllers/T03Controller/T03Controller.java"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="1"/>
@@ -13,9 +13,9 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
-    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="TXXController"/> <!-- TODO -->
-    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="dpm-project-txx"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="dpm-project-txx"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="T03Controller"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="dpm-project-t03"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="dpm-project-t03"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.library.path=&quot;${LD_LIBRARY_PATH}&quot;"/>
-    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:dpm-project-txx/controllers/TXXController}"/> <!-- TODO -->
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:dpm-project-t03/controllers/T03Controller}"/>
 </launchConfiguration>
