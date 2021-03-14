@@ -1,7 +1,6 @@
 package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
-import static java.lang.Math.*;
 
 import ca.mcgill.ecse211.playingfield.Point;
 import simlejos.ExecutionController;
