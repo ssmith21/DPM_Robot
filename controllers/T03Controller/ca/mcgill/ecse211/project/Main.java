@@ -46,7 +46,6 @@ public class Main {
    * 
    * <p>Note: You can disable printing from the Wi-Fi code via ENABLE_DEBUG_WIFI_PRINT.
    * 
-   * @author Michael Smith, Tharsan Ponnampalam, Younes Boubekeur, Olivier St-Martin Cormier
    */
   public static void wifiExample() {
     // Note that we are using the Resources.println() method, not System.out.println(), to ensure
