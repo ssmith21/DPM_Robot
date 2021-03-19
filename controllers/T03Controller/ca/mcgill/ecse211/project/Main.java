@@ -17,14 +17,20 @@ public class Main {
   public static void main(String[] args) {
     ExecutionController.performPhysicsSteps(INITIAL_NUMBER_OF_PHYSICS_STEPS);
     ExecutionController.performPhysicsStepsInBackground(PHYSICS_STEP_PERIOD);
-    
+
     // Start the odometer thread and update the number of threads
     new Thread(odometer).start();
+//    odometer.printPosition();
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
-    
     // TODO Replace these method calls with your own logic
     beep(3);
     wifiExample();
+    
+    
+    
+    
+    System.out.println("HJTISOFJSD");
+    System.exit(0);
   }
   
   /**
