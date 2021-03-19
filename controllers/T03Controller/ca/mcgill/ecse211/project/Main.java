@@ -23,7 +23,7 @@ public class Main {
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
     
     // TODO Replace these method calls with your own logic
-    LocalEV3.getAudio().beep(); // beeps once
+    beep(3);
     wifiExample();
   }
   
@@ -75,6 +75,17 @@ public class Main {
 
     // Example 5: Calculate the area of a region
     println("The island area is " + island.getWidth() * island.getHeight() + ".");
+  }
+  
+  /**
+   * This method control robot beep n times.
+   * @param n number of beeps
+   */
+  public static void beep(int n) {
+    for (int i = 0; i < n; i++) {
+      LocalEV3.getAudio().beep();
+      ExecutionController.performPhysicsStepsInBackground(PHYSICS_STEP_PERIOD);
+    }
   }
 
 }
