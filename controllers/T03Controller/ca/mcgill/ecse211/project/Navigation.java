@@ -236,9 +236,6 @@ public class Navigation {
     rightMotor.setSpeed(FORWARD_SPEED);
   }
   
-  // TODO Bring Navigation-related helper methods from Labs 2, 3, and 5 here
-  // You can also add other helper methods here, but remember to document them with Javadoc (/**)!
-  
   /**
    * Converts input distance to the total rotation of each wheel needed to cover that distance.
    * 
