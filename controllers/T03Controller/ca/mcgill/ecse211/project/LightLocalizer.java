@@ -40,8 +40,8 @@ public class LightLocalizer {
    * Then it sets the odometer to (x,y,theta) for our world frame of reference.
    */
   public static void localize_start() {
-    stepOne_start();  // Moving towards (y=1) black line.
-    stepTwo_start();  // Moving toward (1,1)
+//    stepOne_start();  // Moving towards (y=1) black line.
+//    stepTwo_start();  // Moving toward (1,1)
   }
   
   /**

@@ -22,12 +22,41 @@ public class Main {
     // Start the odometer thread and update the number of threads
     new Thread(odometer).start();
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
+    odometer.printPosition();
+
     // TODO Replace these method calls with your own logic
     beep(3);
     initialLocalize();
         
     System.exit(0);
   }
+  
+
+  
+  // TODO : Put this in a localization class
+  public static void initialLocalize() {
+    UltrasonicLocalizer.localize();
+    LightLocalizer.localize_start();
+    odometer.printPosition();
+    println("Done localizing");
+    println("We are currently at "+redCorner);
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   /**
    * Example using WifiConnection to communicate with a server and receive data concerning the
@@ -78,32 +107,6 @@ public class Main {
     // Example 5: Calculate the area of a region
     println("The island area is " + island.getWidth() * island.getHeight() + ".");
   }
-  
-  // TODO : Put this in a localization class
-  public static void initialLocalize() {
-//    UltrasonicLocalizer.localize();
-//    LightLocalizer.localize_start();
-//    println("Done localizing");
-    println("Running...");
-    println("Map:\n" + wifiParameters);
-    println("Red Team: " + redTeam);
-    println("Green Zone: " + green);
-    println("Island Zone, upper right: " + island.ur);
-    println("Red tunnel footprint, lower left y value: " + tnr.ll.y);
-    println("All waypoints: " + waypoints);
-    if (overpass.endpointA.x >= island.ll.x && overpass.endpointA.y >= island.ll.y) {
-      println("Overpass endpoint A is on the island.");
-    } else {
-      errPrintln("Overpass endpoint A is in the water!"); // prints to stderr (shown in red)
-    }
-    println("Distance between waypoints 3 and 5:",
-        Navigation.distanceBetween(waypoint(3), waypoint(5)));
-    println("The island area is " + island.getWidth() * island.getHeight() + ".");
-    System.out.println("new methiodsdfj");
-    UltrasonicLocalizer.localize();
-    System.out.println("WHY tf won't this localize");
-  }
-  
   
   
   

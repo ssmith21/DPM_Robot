@@ -97,7 +97,7 @@ public class Resources {
   public static final int FORWARD_SPEED = 500;
   
   /** The speed at which the robot rotates in degrees per second. */
-  public static final int ROTATE_SPEED = 200;
+  public static final int ROTATE_SPEED = 100;
   
   /** The motor acceleration in degrees per second squared. */
   public static final int ACCELERATION = 1000;
@@ -127,7 +127,7 @@ public class Resources {
   public static final int MOTOR_LOW = 100;
   
   /** Threshold constant for rising and falling edge cases for the ultrasonic localizer. */
-  public static final int COMMON_D = 40;
+  public static final int COMMON_D = 25;
 
   /** Noise margin constant for falling edge ultrasonic localizer. */
   public static final int FALLINGEDGE_K = 1;
