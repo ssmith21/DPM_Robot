@@ -40,16 +40,12 @@ public class UltrasonicLocalizer {
    * Localizes the robot to theta = 0.
    */
   public static void localize() {
-    System.out.println("Initial US reading : "+readUsDistance());
     
-    // warmup
-    for(int i=0; i<100; i++) {
+    // warmup the ultrasonic sensor
+    for(int i=0; i<25; i++) {
       readUsDistance();
     }
-    
-    System.out.println("New US reading : "+readUsDistance());
-
-    
+   
     //Facing the robot toward the walls
     if (readUsDistance() < (COMMON_D - FALLINGEDGE_K)) {
       risingEdge();
@@ -68,7 +64,6 @@ public class UltrasonicLocalizer {
   * the robot will then appropriately orient itself accordingly along the 0 degree y-axis.
   */
   public static void fallingEdge() {
-    System.out.println("Falling Edge");
 
     // Clockwise rotation to record value for alpha
     leftMotor.setSpeed(ROTATE_SPEED);
@@ -77,7 +72,6 @@ public class UltrasonicLocalizer {
     rightMotor.backward();
     
     while (true) {
-      System.out.println("1 : "+readUsDistance());
       if (readUsDistance() < COMMON_D - FALLINGEDGE_K) {
         leftMotor.setSpeed(0);
         rightMotor.setSpeed(0);
@@ -87,12 +81,10 @@ public class UltrasonicLocalizer {
     }
     // Anti-clockwise rotation to record beta value
     turnBy(-alpha);
-//    odometer.setTheta(0);
     leftMotor.backward();
     rightMotor.forward();
     
     while (true) {
-      System.out.println("2 : "+readUsDistance());
       if (readUsDistance() < COMMON_D - FALLINGEDGE_K) {
         beta = odometer.getXyt()[2];
         leftMotor.setSpeed(0);
@@ -123,8 +115,6 @@ public class UltrasonicLocalizer {
    * the robot will then appropriately orient itself accordingly along the 0 degree y-axis.
    */
   public static void risingEdge() {
-    System.out.println("Rising Edge");
-
     
     // clockwise rotation to record alpha value
     leftMotor.setSpeed(ROTATE_SPEED);
@@ -132,7 +122,6 @@ public class UltrasonicLocalizer {
     leftMotor.forward();
     rightMotor.backward();
     while (true) {
-      System.out.println("1 : "+readUsDistance());
       if (readUsDistance() > COMMON_D - FALLINGEDGE_K) {
         leftMotor.setSpeed(0);
         rightMotor.setSpeed(0);
@@ -167,7 +156,6 @@ public class UltrasonicLocalizer {
     turnBy(360 - odometer.getXyt()[2]);
   }
   
-
   
   /**
    * Converts input distance to the total rotation of each wheel needed to cover that distance.
