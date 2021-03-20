@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
+import static ca.mcgill.ecse211.project.Movement.*;
 
 import java.lang.Thread;
 import simlejos.ExecutionController;
@@ -20,16 +21,11 @@ public class Main {
 
     // Start the odometer thread and update the number of threads
     new Thread(odometer).start();
-//    odometer.printPosition();
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
     // TODO Replace these method calls with your own logic
     beep(3);
-    wifiExample();
-    
-    
-    
-    
-    System.out.println("HJTISOFJSD");
+    initialLocalize();
+        
     System.exit(0);
   }
   
@@ -83,15 +79,34 @@ public class Main {
     println("The island area is " + island.getWidth() * island.getHeight() + ".");
   }
   
-  /**
-   * This method control robot beep n times.
-   * @param n number of beeps
-   */
-  public static void beep(int n) {
-    for (int i = 0; i < n; i++) {
-      LocalEV3.getAudio().beep();
-      ExecutionController.performPhysicsStepsInBackground(PHYSICS_STEP_PERIOD);
+  // TODO : Put this in a localization class
+  public static void initialLocalize() {
+//    UltrasonicLocalizer.localize();
+//    LightLocalizer.localize_start();
+//    println("Done localizing");
+    println("Running...");
+    println("Map:\n" + wifiParameters);
+    println("Red Team: " + redTeam);
+    println("Green Zone: " + green);
+    println("Island Zone, upper right: " + island.ur);
+    println("Red tunnel footprint, lower left y value: " + tnr.ll.y);
+    println("All waypoints: " + waypoints);
+    if (overpass.endpointA.x >= island.ll.x && overpass.endpointA.y >= island.ll.y) {
+      println("Overpass endpoint A is on the island.");
+    } else {
+      errPrintln("Overpass endpoint A is in the water!"); // prints to stderr (shown in red)
     }
+    println("Distance between waypoints 3 and 5:",
+        Navigation.distanceBetween(waypoint(3), waypoint(5)));
+    println("The island area is " + island.getWidth() * island.getHeight() + ".");
+    System.out.println("new methiodsdfj");
+    UltrasonicLocalizer.localize();
+    System.out.println("WHY tf won't this localize");
   }
+  
+  
+  
+  
+
 
 }

@@ -12,6 +12,7 @@ import static ca.mcgill.ecse211.project.Resources.usMotor;
 import static ca.mcgill.ecse211.project.Resources.usSensor;
 import java.util.Arrays;
 import simlejos.ExecutionController;
+import simlejos.hardware.ev3.LocalEV3;
 
 /**
  * Movement class covers the robot the robot movement and rotation.
@@ -104,5 +105,25 @@ public class Movement {
     rightMotor.forward();
   }
 
+  /**
+   * This method control robot beep n times.
+   * @param n number of beeps
+   */
+  public static void beep(int n) {
+    for (int i = 0; i < n; i++) {
+      LocalEV3.getAudio().beep();
+      pause();
+    }
+  }
+  
+  /**
+   * Halts the robot for a while to allow pausing the simulation to evaluate ultrasonic
+   * localization.
+   */
+  private static void pause() {
+    for (int a = 0; a < 1500; a++) {
+      ExecutionController.waitUntilNextStep();
+    }
+  }
   
 }
