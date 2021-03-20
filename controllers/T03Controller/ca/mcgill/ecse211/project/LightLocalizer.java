@@ -30,6 +30,8 @@ public class LightLocalizer {
   /** Values to operate color sensor. */
   private static int current_color_blue = 1000;
   private static int current_color_red = 1000;
+    private static int current_color = 1000;
+
   
   /** This is the default constructor of this class. It cannot be accessed externally. */
   private LightLocalizer() {}
@@ -40,8 +42,8 @@ public class LightLocalizer {
    * Then it sets the odometer to (x,y,theta) for our world frame of reference.
    */
   public static void localize_start() {
-//    stepOne_start();  // Moving towards (y=1) black line.
-//    stepTwo_start();  // Moving toward (1,1)
+    stepOne_start();  // Moving towards (y=1) black line.
+    stepTwo_start();  // Moving toward (1,1)
   }
   
   /**
@@ -141,14 +143,8 @@ public class LightLocalizer {
    */
   public static boolean blackLineTrigger(SampleProvider colorSensor, float[] sensor) {
     colorSensor.fetchSample(sensor, 0);
-    current_color_blue = (int) (sensor[2]);
-    current_color_red = (int) (sensor[0]);
-
-    if (current_color_blue < THRESHOLD && current_color_red < THRESHOLD) {
-      return true;
-    } else {
-      return false;
-    }
+    current_color = (int) (sensor[0]);
+    return (current_color < THRESHOLD) ? true : false;
   }
   
   /**
