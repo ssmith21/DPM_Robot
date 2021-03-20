@@ -48,6 +48,8 @@ public class LightLocalizer {
     stepTwo_start();  // Moving toward (1,1)
   }
   
+  
+  
   /**
    * A modified version of localization using at waypoints.
    * The final position and orientation of the robot is changed from the original version. 

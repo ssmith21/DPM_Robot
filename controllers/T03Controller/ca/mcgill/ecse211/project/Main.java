@@ -22,52 +22,68 @@ public class Main {
     // Start the odometer thread and update the number of threads
     new Thread(odometer).start();
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
-    odometer.printPosition();
 
     // TODO Replace these method calls with your own logic
     beep(3);
     int startingCorner = getStartingPoint();
     initialLocalize(startingCorner);
-        
+    odometer.printPosition();
+
+    
     System.exit(0);
   }
   
-
+  public static int getStartingPoint() {
+    return (redTeam==3) ? redCorner : greenCorner;
+  }
   
   // TODO : Put this in a localization class
   public static void initialLocalize(int startingCorner) {
     
-    // TODO : localize based on starting corner.
+    // TODO : localize based on starting corner (main issue is light localization)
+    // TODO : figure out the best angle to start at
+    // TODO : change the odometer angles based on the best angles to start at
     switch(startingCorner) {
       case(0):
         println("Bottom left");
         UltrasonicLocalizer.localize();
         LightLocalizer.localize_start();
+        odometer.setXyt(Navigation.toMeters(1), Navigation.toMeters(1), 90);
         break;
       case(1):
         println("Bottom right");
         UltrasonicLocalizer.localize();
         LightLocalizer.localize_start();
+        odometer.setXyt(Navigation.toMeters(14), Navigation.toMeters(1), 270);
         break;
       case(2):
         println("Top right");
         UltrasonicLocalizer.localize();
         LightLocalizer.localize_start();
+        odometer.setXyt(Navigation.toMeters(14), Navigation.toMeters(8), 270);
         break;
       case(3):
         println("Top left");
         UltrasonicLocalizer.localize();
         LightLocalizer.localize_start();
+        odometer.setXyt(Navigation.toMeters(1), Navigation.toMeters(8), 90);
         break;
       default:
         println("Error getting starting corner");
     }
   }
   
-
-  public static int getStartingPoint() {
-    return (redTeam==3) ? redCorner : greenCorner;
+  // TODO
+  public static void crossBridge() {
+    
   }
+  
+  // TODO
+  public static void driveToFirstWaypoint() {
+    
+  }
+
+
   
   
   
@@ -135,8 +151,5 @@ public class Main {
     println("The island area is " + island.getWidth() * island.getHeight() + ".");
   }
   
-  
-  
-
 
 }
