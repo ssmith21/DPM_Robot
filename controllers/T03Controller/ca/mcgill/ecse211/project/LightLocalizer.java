@@ -30,7 +30,9 @@ public class LightLocalizer {
   /** Values to operate color sensor. */
   private static int current_color_blue = 1000;
   private static int current_color_red = 1000;
-    private static int current_color = 1000;
+  private static int current_color = 1000;
+  private static boolean s1Indicator = false;
+  private static boolean s2Indicator = false;
 
   
   /** This is the default constructor of this class. It cannot be accessed externally. */
@@ -105,9 +107,6 @@ public class LightLocalizer {
    * align the robot with the line at (1,1).
    */
   private static void alignWithLine() {
-    // Indicators for if the sensors detect a black line.
-    boolean s1Indicator = false;
-    boolean s2Indicator = false;
     
     while (s1Indicator == false || s2Indicator == false) {   
       leftMotor.setSpeed(FORWARD_SPEED);
@@ -126,7 +125,12 @@ public class LightLocalizer {
         leftMotor.stop();
         s2Indicator = true;
       }
+      
     }
+    
+    // reset the indicators
+    s1Indicator = false;
+    s2Indicator = false;
   }
   
   

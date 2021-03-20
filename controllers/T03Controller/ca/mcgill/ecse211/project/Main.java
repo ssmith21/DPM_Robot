@@ -26,7 +26,8 @@ public class Main {
 
     // TODO Replace these method calls with your own logic
     beep(3);
-    initialLocalize();
+    int startingCorner = getStartingPoint();
+    initialLocalize(startingCorner);
         
     System.exit(0);
   }
@@ -34,12 +35,34 @@ public class Main {
 
   
   // TODO : Put this in a localization class
-  public static void initialLocalize() {
+  public static void initialLocalize(int startingCorner) {
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
-    odometer.printPosition();
-    println("Done localizing");
-    println("We are currently at "+redCorner);
+    
+    // TODO : localize based on starting corner.
+    switch(startingCorner) {
+      case(0):
+        println("Bottom left");
+        break;
+      case(1):
+        println("Bottom right");
+        break;
+      case(2):
+        println("Top right");
+        break;
+      case(3):
+        println("Top left");
+        break;
+      default:
+        println("Error getting starting corner");
+    }
+
+    
+  }
+  
+
+  public static int getStartingPoint() {
+    return (redTeam==3) ? redCorner : greenCorner;
   }
   
   
