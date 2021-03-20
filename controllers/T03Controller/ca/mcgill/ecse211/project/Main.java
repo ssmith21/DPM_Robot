@@ -36,28 +36,32 @@ public class Main {
   
   // TODO : Put this in a localization class
   public static void initialLocalize(int startingCorner) {
-    UltrasonicLocalizer.localize();
-    LightLocalizer.localize_start();
     
     // TODO : localize based on starting corner.
     switch(startingCorner) {
       case(0):
         println("Bottom left");
+        UltrasonicLocalizer.localize();
+        LightLocalizer.localize_start();
         break;
       case(1):
         println("Bottom right");
+        UltrasonicLocalizer.localize();
+        LightLocalizer.localize_start();
         break;
       case(2):
         println("Top right");
+        UltrasonicLocalizer.localize();
+        LightLocalizer.localize_start();
         break;
       case(3):
         println("Top left");
+        UltrasonicLocalizer.localize();
+        LightLocalizer.localize_start();
         break;
       default:
         println("Error getting starting corner");
     }
-
-    
   }
   
 
