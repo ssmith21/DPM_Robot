@@ -65,11 +65,10 @@ public class Main {
         }
         Navigation.turnTo(0);
         Movement.moveStraightFor((TILE_SIZE * 3) + (BASE_WIDTH / 4));
-        if (tng.ll.x == 13.0 || tng.ll.x == 14.0) {
-          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ur.y), 180);
-        }
-        if (tnr.ll.x == 14.0 || tnr.ll.x == 13.0) {
+        if (redTeam == 3) {
           odometer.setXyt(Navigation.toMeters(tnr.ll.x + 0.5), Navigation.toMeters(tnr.ur.y), 180);
+        } else {
+          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ur.y), 180);
         }
         break;
       case(2):
@@ -78,19 +77,20 @@ public class Main {
         LightLocalizer.localize_start();
         odometer.setXyt(Navigation.toMeters(14), Navigation.toMeters(8), 180);
         Navigation.turnTo(90);
+        // When bridge is beside the wall
         if (tng.ll.x == 14.0 || tnr.ll.x == 14.0) {
           Movement.moveStraightFor((TILE_SIZE) / 2);
         }
+        // When the bridge is not beside the wall
         if (tng.ll.x == 13.0 || tnr.ll.x == 13.0) {
           Movement.moveStraightFor((-TILE_SIZE) / 2);
         }
         Navigation.turnTo(180);
         Movement.moveStraightFor((TILE_SIZE * 3));
-        if (tng.ll.x == 13.0 || tng.ll.x == 14.0) {
-          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ll.y), 180);
-        }
-        if (tnr.ll.x == 14.0 || tnr.ll.x == 13.0) {
+        if (redTeam == 3) {
           odometer.setXyt(Navigation.toMeters(tnr.ll.x + 0.5), Navigation.toMeters(tnr.ll.y), 180);
+        } else {
+          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ll.y), 180);
         }
         break;
       case(3):
@@ -106,10 +106,10 @@ public class Main {
         }
         Navigation.turnTo(180);
         Movement.moveStraightFor((BASE_WIDTH / 4) + (TILE_SIZE * 3) + (BASE_WIDTH / 6));
-        if (tnr.ll.x == 0.0 || tnr.ll.x == 1.0) {
+        if (redTeam == 3) {
           odometer.setXyt(Navigation.toMeters(tnr.ll.x + 0.5), Navigation.toMeters(tnr.ll.y), 180);
         }
-        if (tng.ll.x == 0.0 || tng.ll.x == 1.0) {
+        else {
           odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ll.y), 180);
         }
         break;
