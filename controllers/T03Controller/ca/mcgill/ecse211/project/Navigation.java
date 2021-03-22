@@ -108,6 +108,7 @@ public class Navigation {
   // no obstacles
   public static void driveToFirstWayPoint() {
     Movement.moveStraightFor(TILE_SIZE/2);
+    LightLocalizer.localize_waypoint();
     Point p1 = new Point(14,1); 
     pause();
     turnTo(getDestinationAngle(getCurrentPoint_feet(), p1));

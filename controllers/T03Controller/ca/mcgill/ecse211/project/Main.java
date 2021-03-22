@@ -24,122 +24,18 @@ public class Main {
 
     // TODO Replace these method calls with your own logic
     beep(3);
-    int startingCorner = getStartingPoint();
-    initialLocalize(startingCorner);
-    odometer.printPosition();
+    int startingCorner = Navigation.getStartingPoint();
+    Navigation.initialLocalize(startingCorner);
+//    odometer.printPosition();
+    odometer.printPositionInTileLengths();
+
+    Navigation.driveToFirstWayPoint();
+    odometer.printPositionInTileLengths();
 
     
     System.exit(0);
   }
-  
-  public static int getStartingPoint() {
-    return (redTeam == 3) ? redCorner : greenCorner;
-  }
-  
-  // TODO : Put this in a localization class
-  // Since now it is also crossing the bridge it is not a bad idea to put it in Navigation
-  public static void initialLocalize(int startingCorner) {
-    
-    // TODO : localization is problematic at bottom corners
-    // TODO : change the odometer angles based on the best angles to start at
-    // TODO : cover the case that one team has the bridge beside the wall and the other has not.
-    switch (startingCorner) {
-      case(0):
-        //TODO : this case hasn't been tested yet
-        println("Bottom left");
-        UltrasonicLocalizer.localize();
-        LightLocalizer.localize_start();
-        odometer.setXyt(Navigation.toMeters(1), Navigation.toMeters(1), 90);
-        break;
-        //TODO : needs to be improved after localization is fixed
-      case(1):
-        println("Bottom right");
-        UltrasonicLocalizer.localize();
-        LightLocalizer.localize_start();
-        odometer.setXyt(Navigation.toMeters(14), Navigation.toMeters(1), 270);
-        if (tng.ll.x == 13.0 || tnr.ll.x == 13.0) {
-          Movement.moveStraightFor((TILE_SIZE) / 3);
-        }
-        if (tng.ll.x == 14.0 || tnr.ll.x == 14.0) {
-          Movement.moveStraightFor((-TILE_SIZE) / 1.7);
-        }
-        Navigation.turnTo(0);
-        Movement.moveStraightFor((TILE_SIZE * 3) + (BASE_WIDTH / 4));
-        if (redTeam == 3) {
-          odometer.setXyt(Navigation.toMeters(tnr.ll.x + 0.5), Navigation.toMeters(tnr.ur.y), 180);
-        } else {
-          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ur.y), 180);
-        }
-        break;
-      case(2):
-        println("Top right");
-        UltrasonicLocalizer.localize();
-        LightLocalizer.localize_start();
-        odometer.setXyt(Navigation.toMeters(14), Navigation.toMeters(8), 180);
-        Navigation.turnTo(90);
-        // When bridge is beside the wall
-        if (tng.ll.x == 14.0 || tnr.ll.x == 14.0) {
-          Movement.moveStraightFor((TILE_SIZE) / 2);
-        }
-        // When the bridge is not beside the wall
-        if (tng.ll.x == 13.0 || tnr.ll.x == 13.0) {
-          Movement.moveStraightFor((-TILE_SIZE) / 2);
-        }
-        Navigation.turnTo(180);
-        Movement.moveStraightFor((TILE_SIZE * 3));
-        if (redTeam == 3) {
-          odometer.setXyt(Navigation.toMeters(tnr.ll.x + 0.5), Navigation.toMeters(tnr.ll.y), 180);
-        } else {
-          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ll.y), 180);
-        }
-        break;
-      case(3):
-        println("Top left");
-        UltrasonicLocalizer.localize();
-        LightLocalizer.localize_start();
-        odometer.setXyt(Navigation.toMeters(1), Navigation.toMeters(8), 90);
-        if (tnr.ll.x == 0.0 || tng.ll.x == 0.0) {
-          Movement.moveStraightFor((-TILE_SIZE * 1.35) / 2);
-        }
-        if (tnr.ll.x == 1.0 || tng.ll.x == 1.0) {
-          Movement.moveStraightFor((TILE_SIZE * 0.50) / 2);
-        }
-        Navigation.turnTo(180);
-        Movement.moveStraightFor((BASE_WIDTH / 4) + (TILE_SIZE * 3) + (BASE_WIDTH / 6));
-        if (redTeam == 3) {
-          odometer.setXyt(Navigation.toMeters(tnr.ll.x + 0.5), Navigation.toMeters(tnr.ll.y), 180);
-        }
-        else {
-          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ll.y), 180);
-        }
-        break;
-      default:
-        println("Error getting starting corner");
-    }
-  }
-  
-  // TODO
-  public static void driveToFirstWaypoint() {
-    
-  }
 
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   /**
    * Example using WifiConnection to communicate with a server and receive data concerning the
