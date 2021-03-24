@@ -103,7 +103,7 @@ public class Navigation {
           Movement.moveStraightFor(toMeters((tunnel.ll.y + 0.5) - toFeet(odometer.getXyt()[1])));
           turnTo(90);
           odometer.setXyt(toMeters(1), toMeters(tunnel.ll.y + 0.5), 90);
-          Movement.moveStraightFor(tunnel.ur.x - toMeters(toFeet(odometer.getXyt()[0])));
+          Movement.moveStraightFor(toMeters(tunnel.ur.x - toFeet(odometer.getXyt()[0])));
           odometer.setXyt(toMeters(tunnel.ur.x), toMeters(tunnel.ll.y + 0.5), 90);
         }
         break;
