@@ -112,7 +112,7 @@ public class Movement {
   public static void beep(int n) {
     for (int i = 0; i < n; i++) {
       LocalEV3.getAudio().beep();
-      pause();
+      pause(1);
     }
   }
   
@@ -120,10 +120,18 @@ public class Movement {
    * Halts the robot for a while to allow pausing the simulation to evaluate ultrasonic
    * localization.
    */
-  private static void pause() {
-    for (int a = 0; a < 1500; a++) {
+  /**
+   * Pause the robot for a certain amount of time.
+   * @param time : the amount of time we want to pause for, this value is roughly equal to 1 second.
+   */
+  public static void pause(double time) {
+    leftMotor.setSpeed(0);
+    rightMotor.setSpeed(0);
+    for(int i=0; i<time*1000; i++) {
       ExecutionController.waitUntilNextStep();
     }
+    leftMotor.setSpeed(FORWARD_SPEED);
+    rightMotor.setSpeed(FORWARD_SPEED);
   }
   
 }

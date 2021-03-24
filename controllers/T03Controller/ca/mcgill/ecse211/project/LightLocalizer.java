@@ -112,24 +112,32 @@ public class LightLocalizer {
   /**
    * align the robot with the line at (1,1).
    */
-  private static void alignWithLine() {
+  public static void alignWithLine() {
     
     while (s1Indicator == false || s2Indicator == false) {   
       leftMotor.setSpeed(FORWARD_SPEED);
       rightMotor.setSpeed(FORWARD_SPEED);
-      leftMotor.forward();
-      rightMotor.forward();      
+      
+      if(s1Indicator==false) {
+        rightMotor.forward();      
+      }
+      if(s2Indicator==false) {
+        leftMotor.forward();
+      }
 
       //When it reaches (1,1) with sensor1 first
-      if (blackLineTrigger(leftColorSensor, sensor1_data)) {
+      if (blackLineTrigger(leftColorSensor, sensor1_data) && s1Indicator==false) {
         rightMotor.stop();
         s1Indicator = true;
+        Movement.pause(0.1);
       }
       
       //When it reaches (1,1) with sensor2 first
-      if (blackLineTrigger(rightColorSensor, sensor2_data)) {
+      if (blackLineTrigger(rightColorSensor, sensor2_data) && s2Indicator==false) {
         leftMotor.stop();
         s2Indicator = true;
+        Movement.pause(0.1);
+
       }
       
     }
@@ -152,7 +160,10 @@ public class LightLocalizer {
    * @return true if black line is detected by both sensors.
    */
   public static boolean blackLineTrigger(SampleProvider colorSensor, float[] sensor) {
-    colorSensor.fetchSample(sensor, 0);
+    int warmUpNoise = 5; // colour sensor will fetch several samples to "warmup" the sensor.
+    for(int i=0; i<warmUpNoise; i++) {
+      colorSensor.fetchSample(sensor, 0);
+    }
     current_color = (int) (sensor[0]);
     return (current_color < THRESHOLD) ? true : false;
   }

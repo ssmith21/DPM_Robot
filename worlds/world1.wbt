@@ -36,8 +36,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.9987118983143434 -0.008396714730365136 -0.050040377167819006 5.950264334219281
-  position 2.2284566780907187 -1.2956213851383445 7.531482901188855
+  orientation -0.9950099745983657 0.016511371137119854 0.09839982252490088 5.9490485841017495
+  position 2.71371549291214 -0.42456573689730687 4.908991327140358
 }
 TexturedBackground {
 }
@@ -48,7 +48,7 @@ DEF ARENA DPM-CompetitionArena {
     DEF BRIDGE1 DPM-Bridge {
       name "bridge1"
       position 3.2004 0.45720000000000005
-      length 2.1
+      length 1.5
     }
     DPM-Marker {
       translation 2.7432000000000003 2.1336
@@ -256,7 +256,7 @@ DEF ARENA DPM-CompetitionArena {
 }
 DPM-Robot {
   name "T03Robot"
-  translation 4.40666 2.57443 0.0636448
+  translation 4.43267 2.5894 0.0640519
   rotation -0.015923903099386013 0.0001549360301563355 0.9998731946126509 2.09276
   children [
     EV3-ColorSensor {
