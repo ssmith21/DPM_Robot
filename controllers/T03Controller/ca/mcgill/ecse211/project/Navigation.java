@@ -78,8 +78,10 @@ public class Navigation {
           Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[1]) - tunnel.ll.y));
           odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y), 180);
         } else {
-          Movement.moveStraightFor(toMeters((tunnel.ll.y + 0.5) - toFeet(odometer.getXyt()[1])));
+          Movement.moveStraightFor(
+              toMeters(-(tunnel.ll.y + 0.5) + toFeet(odometer.getXyt()[1])) - verticalOffset);
           turnTo(270);
+          Movement.moveStraightFor(horizontalOffset);
           odometer.setXyt(toMeters(14), toMeters(tunnel.ll.y + 0.5), 270);
           Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[0]) - tunnel.ll.x));
           odometer.setXyt(toMeters(tunnel.ll.x), toMeters(tunnel.ll.y + 0.5), 270);
