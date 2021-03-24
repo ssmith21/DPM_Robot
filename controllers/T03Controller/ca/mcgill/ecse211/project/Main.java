@@ -26,7 +26,6 @@ public class Main {
     beep(3);
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
-    odometer.printPosition();
     Navigation.crossingTunnel(corner);
     odometer.printPosition();
     //Navigation.driveToFirstWayPoint();

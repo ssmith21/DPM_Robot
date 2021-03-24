@@ -59,6 +59,15 @@ public class LightLocalizer {
     stepTwo_waypoint();
   }
   
+  /**
+   * A modified version of localization using at waypoints.
+   * The final position and orientation of the robot is changed from the original version. 
+   * In this version however, the final orientation is 180 degrees different to the localize_waypoint() method.
+   */
+  public static void localize_waypoint_2() {
+    stepOne_waypoint_2();
+    stepTwo_waypoint();
+  }
   
   /**
    * Localizes the robot to the black line which intersects (1,1).
@@ -100,6 +109,17 @@ public class LightLocalizer {
   }
   
   /**
+   * A modified version of stepOne using at waypoints.
+   * Modified the position of the robot
+   */
+  private static void stepOne_waypoint_2() {
+    double backwardAdjustment = -0.0273 * 3.5;
+    alignWithLine();
+    moveStraightFor(backwardAdjustment);
+    turnBy(-90.0);
+  }
+  
+  /**
    * A modified version of stepTwo.
    * The robot will not turn in the modified version.
    */
@@ -110,7 +130,7 @@ public class LightLocalizer {
   }
   
   /**
-   * align the robot with the line at (1,1).
+   * align the robot with a line perpendicular to its' current orientation.
    */
   public static void alignWithLine() {
     
