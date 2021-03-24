@@ -24,13 +24,13 @@ public class Main {
 
     // TODO Replace these method calls with your own logic
     beep(3);
-    int startingCorner = Navigation.getStartingPoint();
-    Navigation.initialLocalize(startingCorner);
-//    odometer.printPosition();
-    odometer.printPositionInTileLengths();
-
-    Navigation.driveToFirstWayPoint();
-    odometer.printPositionInTileLengths();
+    UltrasonicLocalizer.localize();
+    LightLocalizer.localize_start();
+    odometer.printPosition();
+    Navigation.crossingTunnel(corner);
+    odometer.printPosition();
+    //Navigation.driveToFirstWayPoint();
+    //beep(3);
 
     
     System.exit(0);

@@ -5,6 +5,13 @@ import ca.mcgill.ecse211.playingfield.Overpass;
 import ca.mcgill.ecse211.playingfield.Point;
 import ca.mcgill.ecse211.playingfield.Region;
 import ca.mcgill.ecse211.wificlient.WifiConnection;
+import static ca.mcgill.ecse211.project.Resources.greenCorner;
+import static ca.mcgill.ecse211.project.Resources.greenTeam;
+import static ca.mcgill.ecse211.project.Resources.redCorner;
+import static ca.mcgill.ecse211.project.Resources.redTeam;
+import static ca.mcgill.ecse211.project.Resources.tng;
+import static ca.mcgill.ecse211.project.Resources.tnr;
+import static ca.mcgill.ecse211.project.Resources.tunnel;
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.List;
@@ -207,6 +214,18 @@ public class Resources {
 
   /** The racetrack waypoints, zero-indexed. */
   public static List<Point> waypoints = makeWaypoints();
+  
+  /** our team: read or green. */
+  public static int team = (redTeam == 3) ? redTeam : greenTeam;
+  
+  /** our tunnel. */
+  public static Region tunnel = (team == redTeam) ? tnr : tng;
+  
+  /** our starting corner. */
+  public static int corner = (redTeam == 3) ? redCorner : greenCorner;
+  
+  /** tunnel orientation. */
+  public static boolean verticalTunnel = ((tunnel.ll.x + 1) == tunnel.ur.x) ? true : false;
   
   /**
    * Receives Wi-Fi parameters from the server program.

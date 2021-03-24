@@ -11,91 +11,98 @@ import simlejos.ExecutionController;
 public class Navigation {
   
   /** a counter to make sure two points are the same. */
-  private static int counter = 0;
+  public static int counter = 0;
+  
   
   /** Do not instantiate this class. */
   private Navigation() {}
   
   
   
-  public static int getStartingPoint() {
-    return (redTeam == 3) ? redCorner : greenCorner;
-  }
+
   
   // Since now it is also crossing the bridge it is not a bad idea to put it in Navigation
-  public static void initialLocalize(int startingCorner) {
+  public static void crossingTunnel(int startingCorner) {
     
     // TODO : localization is problematic at bottom corners
-    // TODO : change the odometer angles based on the best angles to start at
-    // TODO : cover the case that one team has the bridge beside the wall and the other has not.
+    // TODO : The horizontal tunnel and Bottom cases still should be tested and adjusted
+    double horizontalOffset = (BASE_WIDTH / 2);
+    double verticalOffset = (BASE_WIDTH / 2.5);
     switch (startingCorner) {
       case(0):
-        //TODO : this case hasn't been tested yet
         println("Bottom left");
-        UltrasonicLocalizer.localize();
-        LightLocalizer.localize_start();
-        odometer.setXyt(Navigation.toMeters(1), Navigation.toMeters(1), 90);
+        odometer.setXyt(toMeters(1), toMeters(1), 0);
+        if (verticalTunnel) {
+          turnTo(90);
+          Movement.moveStraightFor(toMeters((tunnel.ll.x + 0.5) - toFeet(odometer.getXyt()[0])));
+          turnTo(0);
+          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(1), 0);
+          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[1]) - tunnel.ur.y));
+          odometer.setXyt(toMeters(tunnel.ur.x - 0.5), toMeters(tunnel.ur.y), 0);
+        } else {
+          Movement.moveStraightFor(toMeters((tunnel.ll.y + 0.5) - toFeet(odometer.getXyt()[1])));
+          turnTo(90);
+          odometer.setXyt(toMeters(1), toMeters(tunnel.ll.y + 0.5), 90);
+          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[0]) - tunnel.ur.x));
+          odometer.setXyt(toMeters(tunnel.ur.x), toMeters(tunnel.ur.y + 0.5), 90);
+        }
         break;
-        //TODO : needs to be improved after localization is fixed
       case(1):
         println("Bottom right");
-        UltrasonicLocalizer.localize();
-        LightLocalizer.localize_start();
-        odometer.setXyt(Navigation.toMeters(14), Navigation.toMeters(1), 270);
-        if (tng.ll.x == 13.0 || tnr.ll.x == 13.0) {
-          Movement.moveStraightFor((TILE_SIZE) / 3);
-        }
-        if (tng.ll.x == 14.0 || tnr.ll.x == 14.0) {
-          Movement.moveStraightFor((-TILE_SIZE) / 1.7);
-        }
-        Navigation.turnTo(0);
-        Movement.moveStraightFor((TILE_SIZE * 3) + (BASE_WIDTH / 4));
-        if (redTeam == 3) {
-          odometer.setXyt(Navigation.toMeters(tnr.ll.x + 0.5), Navigation.toMeters(tnr.ur.y), 180);
+        odometer.setXyt(toMeters(14), toMeters(1), 270);
+        if (verticalTunnel) {
+          Movement.moveStraightFor(
+              toMeters((tunnel.ll.x + 0.5) - toFeet(odometer.getXyt()[0])) - horizontalOffset);
+          turnTo(0);
+          Movement.moveStraightFor(verticalOffset);
+          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(1), 0);
+          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[1]) - tunnel.ur.y));
+          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y), 0);
         } else {
-          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ur.y), 180);
+          turnTo(0);
+          Movement.moveStraightFor(toMeters((tunnel.ll.y + 0.5) - toFeet(odometer.getXyt()[1])));
+          turnTo(270);
+          odometer.setXyt(toMeters(14), toMeters(tunnel.ll.y + 0.5), 270);
+          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[0]) - tunnel.ll.x));
+          odometer.setXyt(toMeters(tunnel.ll.x), toMeters(tunnel.ll.y + 0.5), 270);
         }
         break;
       case(2):
         println("Top right");
-        UltrasonicLocalizer.localize();
-        LightLocalizer.localize_start();
-        odometer.setXyt(Navigation.toMeters(14), Navigation.toMeters(8), 180);
-        Navigation.turnTo(90);
-        // When bridge is beside the wall
-        if (tng.ll.x == 14.0 || tnr.ll.x == 14.0) {
-          Movement.moveStraightFor((TILE_SIZE) / 2);
-        }
-        // When the bridge is not beside the wall
-        if (tng.ll.x == 13.0 || tnr.ll.x == 13.0) {
-          Movement.moveStraightFor((-TILE_SIZE) / 2);
-        }
-        Navigation.turnTo(180);
-        Movement.moveStraightFor((TILE_SIZE * 3));
-        if (redTeam == 3) {
-          odometer.setXyt(Navigation.toMeters(tnr.ll.x + 0.5), Navigation.toMeters(tnr.ll.y), 180);
+        odometer.setXyt(toMeters(14), toMeters(8), 180);
+        if (verticalTunnel) {
+          turnTo(90);
+          Movement.moveStraightFor(toMeters((tunnel.ll.x + 0.5) - toFeet(odometer.getXyt()[0])));
+          turnTo(180);
+          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(8), 180);
+          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[1]) - tunnel.ll.y));
+          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y), 180);
         } else {
-          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ll.y), 180);
+          Movement.moveStraightFor(toMeters((tunnel.ll.y + 0.5) - toFeet(odometer.getXyt()[1])));
+          turnTo(270);
+          odometer.setXyt(toMeters(14), toMeters(tunnel.ll.y + 0.5), 270);
+          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[0]) - tunnel.ll.x));
+          odometer.setXyt(toMeters(tunnel.ll.x), toMeters(tunnel.ll.y + 0.5), 270);
         }
         break;
       case(3):
         println("Top left");
-        UltrasonicLocalizer.localize();
-        LightLocalizer.localize_start();
-        odometer.setXyt(Navigation.toMeters(1), Navigation.toMeters(8), 90);
-        if (tnr.ll.x == 0.0 || tng.ll.x == 0.0) {
-          Movement.moveStraightFor((-TILE_SIZE * 1.35) / 2);
-        }
-        if (tnr.ll.x == 1.0 || tng.ll.x == 1.0) {
-          Movement.moveStraightFor((TILE_SIZE * 0.50) / 2);
-        }
-        Navigation.turnTo(180);
-        Movement.moveStraightFor((BASE_WIDTH / 4) + (TILE_SIZE * 3) + (BASE_WIDTH / 6));
-        if (redTeam == 3) {
-          odometer.setXyt(Navigation.toMeters(tnr.ll.x + 0.5), Navigation.toMeters(tnr.ll.y), 180);
-        }
-        else {
-          odometer.setXyt(Navigation.toMeters(tng.ll.x + 0.5), Navigation.toMeters(tng.ll.y), 180);
+        odometer.setXyt(toMeters(1), toMeters(8), 90);
+        if (verticalTunnel) {
+          Movement.moveStraightFor(
+              toMeters((tunnel.ll.x + 0.5) - toFeet(odometer.getXyt()[0])) - horizontalOffset);
+          turnTo(180);
+          Movement.moveStraightFor(verticalOffset);
+          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(8), 180);
+          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[1]) - tunnel.ll.y));
+          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y), 180);
+        } else {
+          turnTo(0);
+          Movement.moveStraightFor(toMeters((tunnel.ll.y + 0.5) - toFeet(odometer.getXyt()[1])));
+          turnTo(90);
+          odometer.setXyt(toMeters(1), toMeters(tunnel.ll.y + 0.5), 90);
+          Movement.moveStraightFor(tunnel.ur.x - toMeters(toFeet(odometer.getXyt()[0])));
+          odometer.setXyt(toMeters(tunnel.ur.x), toMeters(tunnel.ll.y + 0.5), 90);
         }
         break;
       default:
@@ -104,12 +111,11 @@ public class Navigation {
   }
   
   
-  
   // no obstacles
   public static void driveToFirstWayPoint() {
-    Movement.moveStraightFor(TILE_SIZE/2);
+    Movement.moveStraightFor(TILE_SIZE / 2);
     LightLocalizer.localize_waypoint();
-    Point p1 = new Point(14,1); 
+    Point p1 = new Point(14, 1); 
     pause();
     turnTo(getDestinationAngle(getCurrentPoint_feet(), p1));
     pause();
@@ -180,6 +186,9 @@ public class Navigation {
     Point curPoint = getCurrentPoint_feet();
     double travelDist = distanceBetween(curPoint, destination);
     Movement.moveStraightFor(toMeters(travelDist));
+    //odometer.setX(toMeters(destination.x));
+    //odometer.setY(toMeters(destination.y));
+    //odometer.setTheta(getDestinationAngle(curPoint, destination) + 90);
   }
   
   /**
