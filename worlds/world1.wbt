@@ -36,8 +36,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.00010591036185410294 0.2334507601497191 0.9723686190784406 3.1424749287689853
-  position 1.9457602402842267 4.7607443042753586 6.872564387108958
+  orientation -0.9987118983143434 -0.008396714730365136 -0.050040377167819006 5.950264334219281
+  position 2.2284566780907187 -1.2956213851383445 7.531482901188855
 }
 TexturedBackground {
 }
@@ -253,4 +253,70 @@ DEF ARENA DPM-CompetitionArena {
   tileColor_14_6 1 0.5 0.5
   tileColor_14_7 1 0.5 0.5
   tileColor_14_8 1 0.5 0.5
+}
+DPM-Robot {
+  name "T03Robot"
+  translation 4.40666 2.57443 0.0636448
+  rotation -0.015923903099386013 0.0001549360301563355 0.9998731946126509 2.09276
+  children [
+    EV3-ColorSensor {
+      name "S3"
+      translation -0.083 -0.032 -0.018
+      rotation -0.5773489358533613 0.5773529358529169 0.5773489358533613 -2.094395307179586
+    }
+    EV3-ColorSensor {
+      name "S2"
+      translation 0.0833 -0.032 -0.018
+      rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.09439
+    }
+    BallCaster {
+      translation 0 -0.04 -0.05
+    }
+    EV3-LargeMotor {
+      name "B"
+      translation -0.064 0.0618 0.022
+      rotation 0 1 0 -1.5707953071795862
+      position 0.0018201032194750122
+      children [
+        EV3-Ultrasonic {
+          name "S1"
+          translation 0.028 0.012 -0.0081
+          rotation 0.707108281185553 3.3905113482557537e-09 0.70710528118436 3.14159
+        }
+        desing2Sub2-solid {
+          translation 0.0161 0.0004 -0.0001
+          rotation 0 1 0 1.5708
+        }
+      ]
+    }
+    EV3-LargeMotor {
+      name "D"
+      translation 0.056 0.022 -0.026
+      position 163.75541159866827
+      children [
+        Wheel {
+          translation 0.0215 -0.001 0
+          rotation 0 0 1 1.5708
+        }
+      ]
+    }
+    EV3-LargeMotor {
+      name "A"
+      translation -0.056 0.022 -0.026
+      rotation 0 0 1 -5.307179586466759e-06
+      position 219.40177461080114
+      children [
+        Wheel {
+          translation -0.0217 -0.001 0
+          rotation 0 0 -1 1.5708
+        }
+      ]
+    }
+    desing2Sub1-solid {
+      translation 0 0.008 -0.0137
+    }
+    EV3 {
+    }
+  ]
+  controller "T03Controller"
 }
