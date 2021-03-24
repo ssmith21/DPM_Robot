@@ -69,8 +69,9 @@ public class LightLocalizer {
    * to the black line which intersects (1,1).
    */
   private static void stepOne_start() {
+    double backwardAdjustment = -0.0273;
     alignWithLine();
-    moveStraightFor(-0.0273);
+    moveStraightFor(backwardAdjustment);
     turnBy(90.0);
   }
   
@@ -81,8 +82,9 @@ public class LightLocalizer {
    * to place the robot at (1,1,0) with reference to the odometer.
    */
   private static void stepTwo_start() {
+    double backwardAdjustment = -0.0273 * 3.5;
     alignWithLine();
-    moveStraightFor(-0.0273 * 3.5);
+    moveStraightFor(backwardAdjustment);
     turnBy(-90.0);
   }
   
@@ -91,8 +93,9 @@ public class LightLocalizer {
    * Modified the position of the robot
    */
   private static void stepOne_waypoint() {
+    double backwardAdjustment = -0.0273 * 3.5;
     alignWithLine();
-    moveStraightFor(-0.0273 * 3.5);
+    moveStraightFor(backwardAdjustment);
     turnBy(90.0);
   }
   
@@ -101,8 +104,9 @@ public class LightLocalizer {
    * The robot will not turn in the modified version.
    */
   private static void stepTwo_waypoint() {
+    double backwardAdjustment = -0.0273 * 3.5;
     alignWithLine();
-    moveStraightFor(-0.0273 * 3.5);
+    moveStraightFor(backwardAdjustment);
   }
   
   /**

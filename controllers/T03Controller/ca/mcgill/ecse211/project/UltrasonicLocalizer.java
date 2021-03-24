@@ -40,9 +40,10 @@ public class UltrasonicLocalizer {
    * Localizes the robot to theta = 0.
    */
   public static void localize() {
+    int warmupCounter = 25;
     
     // warmup the ultrasonic sensor
-    for(int i=0; i<25; i++) {
+    for (int i = 0; i < warmupCounter; i++) {
       readUsDistance();
     }
    

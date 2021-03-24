@@ -120,6 +120,7 @@ public class AvoidObstacle {
    */
   public static boolean checkIfPointOnSlope(Point start, Point curr, double[] params) {
     // y = mx + b;
+    double tolerance = 0.09;
     double m = params[0];
     if (m == 0) {
       double xdiff = Math.abs(start.x - curr.x);
@@ -131,7 +132,7 @@ public class AvoidObstacle {
       double curX = curr.x;
       double curY = curr.y;
       double newM = (curY - start.y) / (curX - start.x);
-      return (compareRoughly(newM, m, 0.09));
+      return (compareRoughly(newM, m, tolerance));
     }
   }
 
@@ -145,7 +146,8 @@ public class AvoidObstacle {
    */
   public static double[] getLinearSlope(Point p1, Point p2) {
     double m;
-    if (compareRoughly(p1.x, p2.x, 0.7) || compareRoughly(p1.y, p2.y, 0.7)) {
+    double tolerance = 0.7;
+    if (compareRoughly(p1.x, p2.x, 0.7) || compareRoughly(p1.y, p2.y, tolerance)) {
       m = 0;
     } else {
       m = (p2.y - p1.y) / (p2.x - p1.x);
@@ -174,8 +176,9 @@ public class AvoidObstacle {
    * @return true if distance is more than 0.5
    */
   private static boolean distIndicator(Point start, Point curr) {
+    double threshold = 1.5;
     double distance = Navigation.distanceBetween(start, curr);
-    if (distance > 1.5) {
+    if (distance > threshold) {
       return true;
     }
     return false;
@@ -228,6 +231,7 @@ public class AvoidObstacle {
    * turning left or right.
    */
   public static void correctController() {
+    double initialMove = 0.06475;
     if (distance > 10 && notReturningFlag) {
             
       int motorRotate = 45; 
@@ -243,7 +247,7 @@ public class AvoidObstacle {
       turnUsMotor(motorRotate);
       
       Movement.turnBy(robotRotate);
-      Movement.moveStraightFor(0.06475);
+      Movement.moveStraightFor(initialMove);
       turnUsMotor(motorRotate);
       
       notReturningFlag = false;
