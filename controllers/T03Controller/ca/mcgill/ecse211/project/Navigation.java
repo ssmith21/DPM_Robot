@@ -8,26 +8,27 @@ import ca.mcgill.ecse211.playingfield.Point;
  * The Navigation class is used to make the robot navigate around the playing field.
  */
 public class Navigation {
-  
+
   /** a counter to make sure two points are the same. */
   public static int counter = 0;
   /** horizontal offset of robots' position for tunnel. */
   public static double horizontalOffset = (BASE_WIDTH / 2);
   /** vertical offset of robots' position for tunnel. */
   public static double verticalOffset = (BASE_WIDTH / 2.5);
-  /** horizontal tunnel orientation. */
+  /** horizontal tunnel orientation while crossing the tunnel at the beginning. */
   public static int horizontalOrientation = (corner == 0 || corner == 3) ? 90 : 270;
-  /** vertical tunnel orientation. */
+  /** vertical tunnel orientation while crossing the tunnel at the beginning. */
   public static int verticalOrientation = (corner == 2 || corner == 3) ? 180 : 0;
-  
-  
+  /** horizontal tunnel orientation while crossing the tunnel at the end. */
+  public static int fHorizontalOrientation = (corner == 0 || corner == 3) ? 270 : 90;
+  /** vertical tunnel orientation while crossing the tunnel at the end. */
+  public static int fVerticalOrientation = (corner == 2 || corner == 3) ? 0 : 180;
+
+
   /** Do not instantiate this class. */
   private Navigation() {}
-  
-  
-  
-  //TODO: Not working in vertical case when the tunnel is beside the wall(test with project world)
-  
+
+
   /**
    * Using the starting corner to cross the tunnel using a helper method and set the odometer.
    * Divides the field into 4 different starting corner and crosses the tunnel from each corner.
@@ -87,7 +88,7 @@ public class Navigation {
         errPrintln("Error getting starting corner");
     }
   }
-  
+
   /**
    * Helps the robot to travel through the tunnel depending on what corner the robot is placed at.
    * The movement depends on the corner and orientation of the tunnel.
@@ -102,9 +103,7 @@ public class Navigation {
       Point dest = new Point(destX, destY);
       double destTheta = getDestinationAngle(cur, dest);
       double distance = toMeters(distanceBetween(cur, dest));
-      
-      //TODO: Bug in the this if cond. When ll is beside the wall it hits the wall
-      //I changed it now it's working but I'm not sure if it is generalized.
+
       /* step 1 : get to tunnels' x position if not already inline */
       if (!roughlySame(cur.x, destX, 0.2)) {
         turnTo(destTheta);
@@ -113,9 +112,8 @@ public class Navigation {
         } else {
           Movement.moveStraightFor(distance);
         }
-        //LightLocalizer.localize_waypoint();
       }
-      
+
       /* step 2 : correct position and move to center of the tunnel */
       cur = getCurrentPoint_feet();
       if (cur.x < tunnel.ll.x) { // check if tunnel is alone x-axis boundary
@@ -124,15 +122,14 @@ public class Navigation {
         Movement.moveStraightFor(verticalOffset);
       } else {
         turnTo(270);
-        //LightLocalizer.alignWithLine();
         Movement.moveStraightFor(verticalOffset);
       }
-      
+
       /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
       turnTo(verticalOrientation);
       LightLocalizer.alignWithLine();
       Movement.pause(2);
-      
+
       /* step 4 : approach tunnel while constantly correcting position at each tile */
       cur = getCurrentPoint_feet();
       destX = cur.x;
@@ -160,14 +157,14 @@ public class Navigation {
       Point dest = new Point(destX, destY);
       double destTheta = getDestinationAngle(cur, dest);
       double distance = toMeters(distanceBetween(cur, dest));
-      
+
       /* step 1 : get to tunnels' y position if not already inline */
       if (!roughlySame(cur.y, tunnel.ll.y, 0.2)) {
         turnTo(destTheta);
         Movement.moveStraightFor(distance);
         LightLocalizer.localize_waypoint_2();
       }
-      
+
       /* step 2 : correct position and move to center of the tunnel */
       if (!roughlySame(cur.y, tunnel.ll.y, 0.2)) {
         turnTo(180);
@@ -178,36 +175,41 @@ public class Navigation {
         LightLocalizer.alignWithLine();
         Movement.moveStraightFor(verticalOffset);
       }
-      
+
       /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
       turnTo(horizontalOrientation);
       LightLocalizer.alignWithLine();
-      
+
       /* step 4 : approach tunnel while constantly correcting position at each tile */
       destX = tunnel.ll.x;
       destY = cur.y;
       selfCorrectingPath(destX, destY);
-      
+
       /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
       destX = tunnel.ur.x;
       destY = cur.y;
       selfCorrectingPath(destX, destY);
-      
+
       /* step 6 : move for 90% of one additional tile and align with line. */
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
     }
   }
-  
+
+  /**
+   * Traveling back from the waypoint to the starting point.
+   * The robot crosses the tunnel and goes back to the starting point.
+   * @param start The starting point of the robot.
+   */
   public static void moveBackToStart(Point start) {
-    if(verticalTunnel) {
-      
+    if (verticalTunnel) {
+
     } else {
       Point cur = getCurrentPoint_feet();
       double destX;
       double destY;
       double distance;
-      
+
       /* step 1: Align with y-axis of tunnel */
       if (tunnel.ur.y == 9) { // if tunnel is along the top wall of the playground
         turnTo(0);
@@ -232,7 +234,7 @@ public class Navigation {
         LightLocalizer.localize_waypoint_2();
         odometer.setXyt(toMeters(cur.x), toMeters(tunnel.ur.y), 270);
       }
-      
+
       /* step 2: Align with center of the tunnel */
       if (tunnel.ur.y == 9) {
         turnTo(0);
@@ -244,17 +246,17 @@ public class Navigation {
         Movement.moveStraightFor(verticalOffset);
       }
 
-      
+
       /* step 3: Turn to tunnel and assure we're going straight on */
-      turnTo(270);
+      turnTo(fHorizontalOrientation);
       LightLocalizer.alignWithLine();
-      
+
       /* step 4: Drive towards tunnel */
       cur = getCurrentPoint_feet();
       destX = tunnel.ur.x;
       destY = cur.y;
       selfCorrectingPath(destX, destY);
-      
+
       /* step 5: drive through the tunnel */
       cur = getCurrentPoint_feet();
       destX = tunnel.ll.x;
@@ -264,7 +266,7 @@ public class Navigation {
       /* step 6: move for 90% of one additional tile and align with line. */
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
-      
+
       /* Step 7: Return to starting point */
       cur = getCurrentPoint_feet();
       double destTheta = getDestinationAngle(cur, start);
@@ -273,8 +275,8 @@ public class Navigation {
       Movement.moveStraightFor(distance);
     }
   }
-  
-  
+
+
   /**
    * Travel along the x or y axis direction of the playing field while constantly
    * correcting its' path, to make sure that we're traveling directly along the 
@@ -294,9 +296,13 @@ public class Navigation {
       LightLocalizer.alignWithLine();
     }
   }
-  
-  
-  // no obstacles
+
+
+
+  /**
+   * Travel to the first point after passing the tunnel.
+   * @param destination The first waypoint
+   */
   public static void driveToFirstWayPoint(Point destination) {
     Point startPoint = getCurrentPoint_feet();
     double travelDist = toMeters(distanceBetween(startPoint, destination));
@@ -304,8 +310,8 @@ public class Navigation {
     turnTo(destTheta);
     Movement.moveStraightFor(travelDist);
   }
- 
-  
+
+
   /**
    * Travels to specific destination depending on whether
    * the orientation of the robot is correct and whether the path is obstacle free.
@@ -323,25 +329,25 @@ public class Navigation {
     double destTheta = getDestinationAngle(startPoint, destination);
     double[] xyt = odometer.getXyt();
     double angleDiff = Math.abs(destTheta - xyt[2]);
-    
+
     // case 1: we're already at the destination
     if (travelDist < 0.2) {
       System.out.println("Already at destination.");
       return;
     }
-    
+
     // case 2: we're facing the right way
     if (angleDiff < 5.0 || angleDiff > 355.0) {
       System.out.println("Already Pointing in the right direction, might have obstacles ahead.");
       travelToObstacle(destination);
-      
+
       // case 3: we have to turn.
     } else {
       System.out.println("Destination might have obstacles ahead.");
       turnTo(destTheta);
       travelToObstacle(destination);
     }
-    
+
     double tolerance = 0.4;
     if ((roughlySame(startPoint.x, destination.x, tolerance)
         || roughlySame(startPoint.y, destination.y, tolerance))
@@ -355,7 +361,7 @@ public class Navigation {
     odometer.setTheta(getDestinationAngle(startPoint, destination) + 90);
     Movement.pause(1);
   }
-  
+
   /**
    * Takes a point and moves directly toward it without concerning about the obstacles.
    * @param destination
@@ -368,7 +374,7 @@ public class Navigation {
     //odometer.setY(toMeters(destination.y));
     //odometer.setTheta(getDestinationAngle(curPoint, destination) + 90);
   }
-  
+
   /**
    * Moves forward and when it detects an obstacle calls avoid method from AvoidObstalce Class.
    * When it passes the obstacle or it is close to destination calls directTravelTo.
@@ -397,15 +403,15 @@ public class Navigation {
     System.out.println("Currently at (" + c.x + "," + c.y
         + ")\tTravelling to (" + destination.x + "," + destination.y
         + ")\t Distance = " + distanceBetween(c, destination));
-    
+
     if (distanceBetween(c, destination) < 0.5) {
       directTravelTo(destination);
     } else {
       travelTo(destination);
     }
-    
+
   }
-  
+
   /**
    * Turns the robot with a minimal angle towards the given input angle in degrees, no matter what
    * its current orientation is. This method is different from {@code turnBy()}.
@@ -424,7 +430,7 @@ public class Navigation {
     return (Math.toDegrees(
         Math.atan2(destination.x - current.x, destination.y - current.y)) + 360) % 360;
   }
-  
+
   /**
    * Calculates the minimal angle to turn in degree.
    * @param initialAngle initial angle of the robot
@@ -437,7 +443,7 @@ public class Navigation {
     double toTurn = (destAngle - initialAngle + 540) % 360 - 180;
     return toTurn;
   }
-  
+
   /**
    * Calculates the distance between two points in feet.
    * @param p1  First point
@@ -450,7 +456,7 @@ public class Navigation {
     double dist = Math.sqrt(dxSqr + dySqr);
     return dist;
   }
-  
+
   /**
    * Takes current point and destination points and compare them.
    * If the difference is less than the tolerance
@@ -464,7 +470,7 @@ public class Navigation {
     double distCurDest = distanceBetween(cur, destination);
     return (distCurDest < tolerance);
   }
-  
+
   /**
    * Converts meters to feet.
    * @param meters distance in meter
@@ -473,7 +479,7 @@ public class Navigation {
   public static double toFeet(double meters) {
     return 3.28084 * meters;
   }
-  
+
   /**
    * Converts feet to meters.
    * @param feet distance in feet
@@ -482,7 +488,7 @@ public class Navigation {
   public static double toMeters(double feet) {
     return feet / 3.28084;
   }
-  
+
   /**
    * Takes two numbers and compare them.
    * if the difference is less than the tolerance
@@ -496,7 +502,7 @@ public class Navigation {
     double diff = Math.abs(a - b);
     return (diff < tolerance);
   }
-  
+
   /**
    * gets the current point from odometer in feet.
    * @return Point in feet unit
@@ -506,7 +512,7 @@ public class Navigation {
     Point curPoint = new Point(toFeet(xyt[0]), toFeet(xyt[1]));
     return curPoint;
   }
-  
+
   /**
    * gets the current point from odometer in meters.
    * @return Point in meter unit
@@ -516,7 +522,7 @@ public class Navigation {
     Point curPoint = new Point(xyt[0], xyt[1]);
     return curPoint;
   }
-    
+
   /**
    * Converts input distance to the total rotation of each wheel needed to cover that distance.
    * 
