@@ -220,12 +220,30 @@ public class Navigation {
         Movement.moveStraightFor(distance - (TILE_SIZE / 10));
         LightLocalizer.localize_waypoint_2();
         odometer.setXyt(toMeters(cur.x), toMeters(tunnel.ll.y), 270);
+      } else {
+        turnTo(0);
+        destX = cur.x;
+        destY = tunnel.ur.y;
+        Point dest = new Point(destX, destY);
+        LightLocalizer.alignWithLine();
+        cur = getCurrentPoint_feet();
+        distance = toMeters(distanceBetween(cur, dest));
+        Movement.moveStraightFor(distance - (TILE_SIZE / 10));
+        LightLocalizer.localize_waypoint_2();
+        odometer.setXyt(toMeters(cur.x), toMeters(tunnel.ur.y), 270);
       }
       
       /* step 2: Align with center of the tunnel */
-      turnTo(0);
-      LightLocalizer.alignWithLine();
-      Movement.moveStraightFor(verticalOffset);
+      if (tunnel.ur.y == 9) {
+        turnTo(0);
+        LightLocalizer.alignWithLine();
+        Movement.moveStraightFor(verticalOffset);
+      } else {
+        turnTo(180);
+        LightLocalizer.alignWithLine();
+        Movement.moveStraightFor(verticalOffset);
+      }
+
       
       /* step 3: Turn to tunnel and assure we're going straight on */
       turnTo(270);
