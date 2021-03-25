@@ -41,14 +41,11 @@ public class Main {
         errPrintln("Error getting starting corner");
     }
     
-    beep(3);
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
+    beep(3);
     Navigation.crossingTunnel(corner);
-    println("Done crossing tunnel");
-    odometer.printPosition();
     Navigation.driveToFirstWayPoint(waypoint(0));
-    odometer.printPositionInTileLengths();
     beep(3);
     Navigation.moveBackToStart(startingPoint, waypoint(0));
 
