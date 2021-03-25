@@ -117,6 +117,7 @@ public class Navigation {
       }
       
       /* step 2 : correct position and move to center of the tunnel */
+      cur = getCurrentPoint_feet();
       if (cur.x < tunnel.ll.x) { // check if tunnel is alone x-axis boundary
         turnTo(90);
         LightLocalizer.alignWithLine();
@@ -130,21 +131,27 @@ public class Navigation {
       /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
       turnTo(verticalOrientation);
       LightLocalizer.alignWithLine();
+      Movement.pause(2);
       
       /* step 4 : approach tunnel while constantly correcting position at each tile */
+      cur = getCurrentPoint_feet();
       destX = cur.x;
       destY = tunnel.ur.y;
       selfCorrectingPath(destX, destY);
+      Movement.pause(2);
 
       /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
+      cur = getCurrentPoint_feet();
       destX = cur.x;
       destY = tunnel.ll.y;
       selfCorrectingPath(destX, destY);
+      Movement.pause(2);
 
       /* step 6 : move for 90% of one additional tile and align with line. */
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
-      
+      Movement.pause(2);
+
     } else {
       /* step 0 : preliminary calculations */
       Point cur = getCurrentPoint_feet();
@@ -206,6 +213,7 @@ public class Navigation {
   private static void selfCorrectingPath(double destX, double destY) {
     Point cur = getCurrentPoint_feet();
     Point dest = new Point(destX, destY);
+    println(distanceBetween(cur, dest));
     int nrTiles = (int) Math.round(distanceBetween(cur, dest));
     for (int i = 0; i < nrTiles; i++) {
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
@@ -228,6 +236,8 @@ public class Navigation {
     double destTheta = getDestinationAngle(startPoint, destination);
     turnTo(destTheta);
     Movement.moveStraightFor(travelDist);
+//    odometer.setX(destination.x);
+//    odometer.setY(destination.y);
   }
  
   

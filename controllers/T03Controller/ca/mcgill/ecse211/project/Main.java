@@ -27,8 +27,10 @@ public class Main {
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
     Navigation.crossingTunnel(corner);
+    println("Done crossing tunnel");
     odometer.printPosition();
     Navigation.driveToFirstWayPoint(waypoint(0));
+    odometer.printPositionInTileLengths();
     beep(3);
 
     
