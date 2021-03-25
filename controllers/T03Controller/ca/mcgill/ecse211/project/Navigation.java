@@ -201,9 +201,58 @@ public class Navigation {
    * The robot crosses the tunnel and goes back to the starting point.
    * @param start The starting point of the robot.
    */
-  public static void moveBackToStart(Point start) {
-    if (verticalTunnel) {
+  public static void moveBackToStart(Point start, Point wayPoint) {
+    if(verticalTunnel) {
+      /* step 0: localize at waypoint */
+      turnTo(0);
+      Movement.moveStraightFor(-TILE_SIZE/4);
+      LightLocalizer.localize_waypoint_2();
+      odometer.setXyt(toMeters(wayPoint.x), toMeters(wayPoint.y), 270);
 
+      /* step 1: align with x-axis of right of tunnel*/
+      Point cur = getCurrentPoint_feet();
+      double destX = tunnel.ur.x;
+      double destY = tunnel.ll.y - toFeet(TILE_SIZE);
+      Point dest = new Point(destX, destY);
+      println("destination "+dest);
+      double destTheta = getDestinationAngle(cur, dest);
+      double distance = toMeters(distanceBetween(cur, dest));
+      turnTo(destTheta);
+      Movement.moveStraightFor(distance);
+      
+      println("Done step 1");
+      odometer.printPosition();
+      odometer.printPositionInTileLengths();
+      
+      /* step 2: Correct position and move to x-center of the tunnel*/
+      turnTo(270);
+      LightLocalizer.alignWithLine();
+      Movement.moveStraightFor(verticalOffset);
+      
+      /* step 3: turn to tunnel and approach tunnel */
+      turnTo(fVerticalOrientation);
+      LightLocalizer.alignWithLine();
+      cur = getCurrentPoint_feet();
+      destX = cur.x;
+      destY = tunnel.ll.y;
+      selfCorrectingPath(destX, destY);
+      
+      /* step 4: travel through tunnel */
+      cur = getCurrentPoint_feet();
+      destX = cur.x;
+      destY = tunnel.ur.y;
+      selfCorrectingPath(destX, destY);
+      
+      /* step 6 : move for 90% of one additional tile and align with line. */
+      Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
+      LightLocalizer.alignWithLine();
+      
+      /* Step 7: Return to starting point */
+      cur = getCurrentPoint_feet();
+      destTheta = getDestinationAngle(cur, start);
+      distance = toMeters(distanceBetween(cur, start));
+      turnTo(destTheta);
+      Movement.moveStraightFor(distance);
     } else {
       Point cur = getCurrentPoint_feet();
       double destX;
@@ -221,7 +270,7 @@ public class Navigation {
         distance = toMeters(distanceBetween(cur, dest));
         Movement.moveStraightFor(distance - (TILE_SIZE / 10));
         LightLocalizer.localize_waypoint_2();
-        odometer.setXyt(toMeters(cur.x), toMeters(tunnel.ll.y), 270);
+        odometer.setXyt(toMeters(wayPoint.x), toMeters(tunnel.ll.y), 270);
       } else {
         turnTo(0);
         destX = cur.x;

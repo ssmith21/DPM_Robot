@@ -50,7 +50,7 @@ public class Main {
     Navigation.driveToFirstWayPoint(waypoint(0));
     odometer.printPositionInTileLengths();
     beep(3);
-    Navigation.moveBackToStart(startingPoint);
+    Navigation.moveBackToStart(startingPoint, waypoint(0));
 
     
     System.exit(0);
