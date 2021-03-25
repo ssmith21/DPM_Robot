@@ -130,26 +130,22 @@ public class Navigation {
       /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
       turnTo(verticalOrientation);
       LightLocalizer.alignWithLine();
-      Movement.pause(2);
 
       /* step 4 : approach tunnel while constantly correcting position at each tile */
       cur = getCurrentPoint_feet();
       destX = cur.x;
       destY = tunnel.ur.y;
       selfCorrectingPath(destX, destY);
-      Movement.pause(2);
 
       /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
       cur = getCurrentPoint_feet();
       destX = cur.x;
       destY = tunnel.ll.y;
       selfCorrectingPath(destX, destY);
-      Movement.pause(2);
 
       /* step 6 : move for 90% of one additional tile and align with line. */
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
-      Movement.pause(2);
 
     } else {
       /* step 0 : preliminary calculations */
@@ -204,10 +200,10 @@ public class Navigation {
    * @param start The starting point of the robot.
    */
   public static void moveBackToStart(Point start, Point wayPoint) {
-    if(verticalTunnel) {
+    if (verticalTunnel) {
       /* step 0: localize at waypoint */
       turnTo(0);
-      Movement.moveStraightFor(-TILE_SIZE/4);
+      Movement.moveStraightFor(-TILE_SIZE / 4);
       LightLocalizer.localize_waypoint_2();
       odometer.setXyt(toMeters(wayPoint.x), toMeters(wayPoint.y), 270);
 
@@ -216,7 +212,7 @@ public class Navigation {
       double destX = tunnel.ur.x;
       double destY = tunnel.ll.y - toFeet(TILE_SIZE);
       Point dest = new Point(destX, destY);
-      println("destination "+dest);
+      println("destination " + dest);
       double destTheta = getDestinationAngle(cur, dest);
       double distance = toMeters(distanceBetween(cur, dest));
       turnTo(destTheta);
