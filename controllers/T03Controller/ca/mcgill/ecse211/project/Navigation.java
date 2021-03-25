@@ -238,11 +238,17 @@ public class Navigation {
       destY = cur.y;
       selfCorrectingPath(destX, destY);
       
-      /* step 5: move for 90% of one additional tile and align with line. */
+      /* step 5: drive through the tunnel */
+      cur = getCurrentPoint_feet();
+      destX = tunnel.ll.x;
+      destY = cur.y;
+      selfCorrectingPath(destX, destY);
+
+      /* step 6: move for 90% of one additional tile and align with line. */
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
       
-      /* Step 6: Return to starting point */
+      /* Step 7: Return to starting point */
       cur = getCurrentPoint_feet();
       double destTheta = getDestinationAngle(cur, start);
       distance = toMeters(distanceBetween(cur,start));
