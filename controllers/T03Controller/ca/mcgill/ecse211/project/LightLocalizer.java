@@ -49,7 +49,7 @@ public class LightLocalizer {
     stepOne_start();  // Moving towards (y=1) black line.
     stepTwo_start();  // Moving toward (1,1)
   }
-  
+   
   
   
   /**

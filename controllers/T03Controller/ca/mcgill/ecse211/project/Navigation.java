@@ -558,7 +558,7 @@ public class Navigation {
     double[] xyt = odometer.getXyt();
     Point curPoint = new Point(toFeet(xyt[0]), toFeet(xyt[1]));
     return curPoint;
-  }
+  } 
 
   /**
    * gets the current point from odometer in meters.

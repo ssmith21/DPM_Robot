@@ -48,7 +48,7 @@ public class Movement {
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance), true);
     rightMotor.rotate(convertDistance(distance), false);
-  }
+  } 
   
   /**
    * Turns the robot by a specified angle. Note that this method is different from
