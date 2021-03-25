@@ -62,7 +62,8 @@ public class LightLocalizer {
   /**
    * A modified version of localization using at waypoints.
    * The final position and orientation of the robot is changed from the original version. 
-   * In this version however, the final orientation is 180 degrees different to the localize_waypoint() method.
+   * In this version however, 
+   * the final orientation is 180 degrees different to the localize_waypoint() method.
    */
   public static void localize_waypoint_2() {
     stepOne_waypoint_2();
@@ -138,22 +139,22 @@ public class LightLocalizer {
       leftMotor.setSpeed(FORWARD_SPEED);
       rightMotor.setSpeed(FORWARD_SPEED);
       
-      if(s1Indicator==false) {
+      if (s1Indicator == false) {
         rightMotor.forward();      
       }
-      if(s2Indicator==false) {
+      if (s2Indicator == false) {
         leftMotor.forward();
       }
 
       //When it reaches (1,1) with sensor1 first
-      if (blackLineTrigger(leftColorSensor, sensor1_data) && s1Indicator==false) {
+      if (blackLineTrigger(leftColorSensor, sensor1_data) && s1Indicator == false) {
         rightMotor.stop();
         s1Indicator = true;
         Movement.pause(0.1);
       }
       
       //When it reaches (1,1) with sensor2 first
-      if (blackLineTrigger(rightColorSensor, sensor2_data) && s2Indicator==false) {
+      if (blackLineTrigger(rightColorSensor, sensor2_data) && s2Indicator == false) {
         leftMotor.stop();
         s2Indicator = true;
         Movement.pause(0.1);
@@ -181,7 +182,7 @@ public class LightLocalizer {
    */
   public static boolean blackLineTrigger(SampleProvider colorSensor, float[] sensor) {
     int warmUpNoise = 5; // colour sensor will fetch several samples to "warmup" the sensor.
-    for(int i=0; i<warmUpNoise; i++) {
+    for (int i = 0; i < warmUpNoise; i++) {
       colorSensor.fetchSample(sensor, 0);
     }
     current_color = (int) (sensor[0]);

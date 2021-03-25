@@ -3,7 +3,6 @@ package ca.mcgill.ecse211.project;
 import static ca.mcgill.ecse211.project.Resources.*;
 
 import ca.mcgill.ecse211.playingfield.Point;
-import simlejos.ExecutionController;
 
 /**
  * The Navigation class is used to make the robot navigate around the playing field.
@@ -12,6 +11,18 @@ public class Navigation {
   
   /** a counter to make sure two points are the same. */
   public static int counter = 0;
+  /** horizontal offset of robots' position for tunnel. */
+  public static double horizontalOffset = (BASE_WIDTH / 2);
+  /** vertical offset of robots' position for tunnel. */
+  public static double verticalOffset = (BASE_WIDTH / 2.5);
+  /** horizontal tunnel orientation. */
+  public static int horizontalOrientation = (corner == 0 || corner == 3) ? 90 : 270;
+  /** vertical tunnel orientation. */
+  public static int verticalOrientation = (corner == 2 || corner == 3) ? 180 : 0;
+  /** final orientation after passing horizontal tunnel. */
+  public static int fhorizontalOrientation = (corner == 0 || corner == 2) ? 90 : 270;
+  /** final orientation after passing vertical tunnel. */
+  public static int fverticaltalOrientation = (corner == 2 || corner == 3) ? 180 : 0; 
   
   
   /** Do not instantiate this class. */
@@ -19,232 +30,211 @@ public class Navigation {
   
   
   
-
+  //TODO: Not working in vertical case when the tunnel is beside the wall(test with project world)
   
-  // Since now it is also crossing the bridge it is not a bad idea to put it in Navigation
+  /**
+   * Using the starting corner to cross the tunnel using a helper method and set the odometer.
+   * Divides the field into 4 different starting corner and crosses the tunnel from each corner.
+   * @param startingCorner The starting corner of the robot.
+   */
   public static void crossingTunnel(int startingCorner) {
-    
-    // TODO : localization is problematic at bottom corners
-    // TODO : The horizontal tunnel and Bottom cases still should be tested and adjusted
-    double horizontalOffset = (BASE_WIDTH / 2); // horizontal offset of robots' position for tunnel
-    double verticalOffset = (BASE_WIDTH / 2.5); // vertical offset of robots' position for tunnel
     switch (startingCorner) {
       case(0):
         println("Bottom left");
         odometer.setXyt(toMeters(1), toMeters(1), 0);
+        moveToTunnel();
         if (verticalTunnel) {
-          turnTo(90);
-          Movement.moveStraightFor(toMeters((tunnel.ll.x + 0.5) - toFeet(odometer.getXyt()[0])) );
-          turnTo(0);
-          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(1), 0);
-          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[1]) - tunnel.ur.y));
-          odometer.setXyt(toMeters(tunnel.ur.x - 0.5), toMeters(tunnel.ur.y), 0);
+          odometer.setXyt(
+              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y + (TILE_SIZE / 3)), 0);
         } else {
-          Movement.moveStraightFor(toMeters((tunnel.ll.y + 0.5) - toFeet(odometer.getXyt()[1])));
-          turnTo(90);
-          odometer.setXyt(toMeters(1), toMeters(tunnel.ll.y + 0.5), 90);
-          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[0]) - tunnel.ur.x));
-          odometer.setXyt(toMeters(tunnel.ur.x), toMeters(tunnel.ur.y + 0.5), 90);
+          odometer.setXyt(
+              toMeters(tunnel.ur.x + (TILE_SIZE / 3)), toMeters(tunnel.ll.y + 0.5), 90);
         }
         break;
       case(1):
         println("Bottom right");
         odometer.setXyt(toMeters(14), toMeters(1), 270);
+        moveToTunnel();
         if (verticalTunnel) {
-          Movement.moveStraightFor(
-              toMeters((tunnel.ll.x + 0.5) - toFeet(odometer.getXyt()[0])) - horizontalOffset);
-          turnTo(0);
-          Movement.moveStraightFor(verticalOffset);
-          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(1), 0);
-          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[1]) - tunnel.ur.y));
-          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y), 0);
+          odometer.setXyt(
+              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y + (TILE_SIZE / 3)), 0);
         } else {
-          turnTo(0);
-          Movement.moveStraightFor(toMeters((tunnel.ll.y + 0.5) - toFeet(odometer.getXyt()[1])));
-          turnTo(270);
-          odometer.setXyt(toMeters(14), toMeters(tunnel.ll.y + 0.5), 270);
-          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[0]) - tunnel.ll.x));
-          odometer.setXyt(toMeters(tunnel.ll.x), toMeters(tunnel.ll.y + 0.5), 270);
+          odometer.setXyt(
+              toMeters(tunnel.ll.x - (TILE_SIZE / 3)), toMeters(tunnel.ll.y + 0.5), 270);
         }
         break;
       case(2):
         println("Top right");
         odometer.setXyt(toMeters(14), toMeters(8), 180);
+        moveToTunnel();
         if (verticalTunnel) {
-          turnTo(90);
-          Movement.moveStraightFor(toMeters((tunnel.ll.x + 0.5) - toFeet(odometer.getXyt()[0])));
-          turnTo(180);
-          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(8), 180);
-          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[1]) - tunnel.ll.y));
-          odometer.setXyt(toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y), 180);
+          odometer.setXyt(
+              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y - (TILE_SIZE / 3)), 180);
         } else {
-          Movement.moveStraightFor(
-              toMeters(-(tunnel.ll.y + 0.5) + toFeet(odometer.getXyt()[1])) - verticalOffset);
-          turnTo(270);
-          Movement.moveStraightFor(horizontalOffset);
-          odometer.setXyt(toMeters(14), toMeters(tunnel.ll.y + 0.5), 270);
-          Movement.moveStraightFor(toMeters(toFeet(odometer.getXyt()[0]) - tunnel.ll.x));
-          odometer.setXyt(toMeters(tunnel.ll.x), toMeters(tunnel.ll.y + 0.5), 270);
+          odometer.setXyt(
+              toMeters(tunnel.ll.x - (TILE_SIZE / 3)), toMeters(tunnel.ll.y + 0.5), 270);
         }
         break;
       case(3):
         println("Top left");
         odometer.setXyt(toMeters(1), toMeters(8), 90);
-        
-        // TODO: new class with just tunnel protocols?
-        
-        // TODO: Remove the next 3 lines
-//        tnr.ll = new Point(5,6);
-//        tnr.ur = new Point(8,7);
-        
-        tnr = tng; // to test
-        println(tnr.ll);
-        println(tnr.ur);
-        verticalTunnel = false;
-        
+        moveToTunnel();
         if (verticalTunnel) {
-//          tnr.ll = new Point(0,3);
-//          tnr.ur = new Point(1,5);
-          
-          /* step 0 : preliminary calculations */
-          Point cur = getCurrentPoint_feet();
-          double destX = tnr.ll.x;
-          double destY = cur.y;
-          Point dest = new Point(destX, destY);
-          double destTheta = getDestinationAngle(cur,dest);
-          double distance = toMeters(distanceBetween(cur,dest));
-          
-          /* step 1 : get to tunnels' x position if not already inline */
-          if(roughlySame(cur.x, destX, 0.2)) {
-            turnTo(destTheta);
-            Movement.moveStraightFor(distance);
-            LightLocalizer.localize_waypoint();
-          }
-          
-          /* step 2 : correct position and move to center of the tunnel */
-          if(cur.x < tnr.ll.x) { // check if tunnel is alone x-axis boundary
-            turnTo(90);
-            LightLocalizer.alignWithLine();
-            Movement.moveStraightFor(verticalOffset);
-          } else {
-            turnTo(270);
-            LightLocalizer.alignWithLine();
-            Movement.moveStraightFor(verticalOffset);
-          }
-          
-          /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
-          turnTo(180);
-          LightLocalizer.alignWithLine();
-
-          
-          /* step 4 : approach tunnel while constantly correcting position at each tile */
-          destX = cur.x;
-          destY = tnr.ur.y;
-          selfCorrectingPath(destX,destY);
-
-          /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
-          destX = cur.x;
-          destY = tnr.ll.y;
-          selfCorrectingPath(destX, destY);
-
-          /* step 6 : move for 90% of one additional tile, then align with line */
-          Movement.moveStraightFor(TILE_SIZE - TILE_SIZE/10);
-          LightLocalizer.alignWithLine();
-          
+          odometer.setXyt(
+              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y - (TILE_SIZE / 3)), 180);
         } else {
-          
-          /* step 0 : preliminary calculations */
-          Point cur = getCurrentPoint_feet();
-          double destX = cur.x;
-          double destY = tnr.ur.y;
-          Point dest = new Point(destX, destY);
-          double destTheta = getDestinationAngle(cur,dest);
-          double distance = toMeters(distanceBetween(cur,dest));
-          
-          /* step 1 : get to tunnels' y position if not already inline */
-          if(!roughlySame(cur.y, tnr.ll.y, 0.2)) {
-            turnTo(destTheta);
-            Movement.moveStraightFor(distance);
-            LightLocalizer.localize_waypoint_2();
-          }
-          println("Done step 1");
-
-          
-          /* step 2 : correct position and move to center of the tunnel */
-          if(!roughlySame(cur.y, tnr.ll.y, 0.2)) {
-            turnTo(180);
-            LightLocalizer.alignWithLine();
-            Movement.moveStraightFor(verticalOffset);
-          }else {
-            turnTo(0);
-            LightLocalizer.alignWithLine();
-            Movement.moveStraightFor(verticalOffset);
-          }
-          println("Done step 2");
-          
-          /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
-          turnTo(90);
-          LightLocalizer.alignWithLine();
-          
-          /* step 4 : approach tunnel while constantly correcting position at each tile */
-          destX = tnr.ll.x;
-          destY = cur.y;
-          selfCorrectingPath(destX, destY);
-          
-          /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
-          destX = tnr.ur.x;
-          destY = cur.y;
-          selfCorrectingPath(destX, destY);
-          
-          /* step 6 : move for 90% of one additional tile, then align with line */
-          Movement.moveStraightFor(TILE_SIZE - TILE_SIZE/10);
-          LightLocalizer.alignWithLine();
+          odometer.setXyt(
+              toMeters(tunnel.ur.x + (TILE_SIZE / 3)), toMeters(tunnel.ll.y + 0.5), 90);
         }
         break;
       default:
-        println("Error getting starting corner");
+        errPrintln("Error getting starting corner");
+    }
+  }
+  
+  /**
+   * Helps the robot to travel through the tunnel depending on what corner the robot is placed at.
+   * The movement depends on the corner and orientation of the tunnel.
+   * 
+   */
+  public static void moveToTunnel() {
+    if (verticalTunnel) {
+      /* step 0 : preliminary calculations */
+      Point cur = getCurrentPoint_feet();
+      double destX = tunnel.ll.x;
+      double destY = cur.y;
+      Point dest = new Point(destX, destY);
+      double destTheta = getDestinationAngle(cur, dest);
+      double distance = toMeters(distanceBetween(cur, dest));
+      
+      //TODO: Bug in the this if cond. When ll is beside the wall it hits the wall
+      //I changed it now it's working but I'm not sure if it is generalized.
+      /* step 1 : get to tunnels' x position if not already inline */
+      if (!roughlySame(cur.x, destX, 0.2)) {
+        turnTo(destTheta);
+        if (cur.x > destX) {
+          Movement.moveStraightFor(distance / 2);
+        } else {
+          Movement.moveStraightFor(distance);
+        }
+        //LightLocalizer.localize_waypoint();
+      }
+      
+      /* step 2 : correct position and move to center of the tunnel */
+      if (cur.x < tunnel.ll.x) { // check if tunnel is alone x-axis boundary
+        turnTo(90);
+        LightLocalizer.alignWithLine();
+        Movement.moveStraightFor(verticalOffset);
+      } else {
+        turnTo(270);
+        //LightLocalizer.alignWithLine();
+        Movement.moveStraightFor(verticalOffset);
+      }
+      
+      /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
+      turnTo(verticalOrientation);
+      LightLocalizer.alignWithLine();
+      
+      /* step 4 : approach tunnel while constantly correcting position at each tile */
+      destX = cur.x;
+      destY = tunnel.ur.y;
+      
+      selfCorrectingPath(destX, destY);
+
+      /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
+      destX = cur.x;
+      destY = tunnel.ll.y;
+      selfCorrectingPath(destX, destY);
+
+      /* step 6 : move for 90% of one additional tile and align with line. */
+      Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
+      LightLocalizer.alignWithLine();
+      
+    } else {
+      /* step 0 : preliminary calculations */
+      Point cur = getCurrentPoint_feet();
+      double destX = cur.x;
+      double destY = tunnel.ur.y;
+      Point dest = new Point(destX, destY);
+      double destTheta = getDestinationAngle(cur, dest);
+      double distance = toMeters(distanceBetween(cur, dest));
+      
+      /* step 1 : get to tunnels' y position if not already inline */
+      if (!roughlySame(cur.y, tunnel.ll.y, 0.2)) {
+        turnTo(destTheta);
+        Movement.moveStraightFor(distance);
+        LightLocalizer.localize_waypoint_2();
+      }
+      
+      /* step 2 : correct position and move to center of the tunnel */
+      if (!roughlySame(cur.y, tunnel.ll.y, 0.2)) {
+        turnTo(180);
+        LightLocalizer.alignWithLine();
+        Movement.moveStraightFor(verticalOffset);
+      } else {
+        turnTo(0);
+        LightLocalizer.alignWithLine();
+        Movement.moveStraightFor(verticalOffset);
+      }
+      
+      /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
+      turnTo(horizontalOrientation);
+      LightLocalizer.alignWithLine();
+      
+      /* step 4 : approach tunnel while constantly correcting position at each tile */
+      destX = tunnel.ll.x;
+      destY = cur.y;
+      selfCorrectingPath(destX, destY);
+      
+      /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
+      destX = tunnel.ur.x;
+      destY = cur.y;
+      selfCorrectingPath(destX, destY);
+      
+      /* step 6 : move for 90% of one additional tile and align with line. */
+      Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
+      LightLocalizer.alignWithLine();
     }
   }
   
   
   /**
-   * 
-   * Traval along the x or y axis direction of the playing field while constantly
-   * correcting its' path, to make sure that we're travelling directly along the 
+   * Travel along the x or y axis direction of the playing field while constantly
+   * correcting its' path, to make sure that we're traveling directly along the 
    * x or y axis.
-   * We do this by travelling 90% of a tile length, then align ourselves with the 
+   * We do this by traveling 90% of a tile length, then align ourselves with the 
    * black line of the tile perpendicular to our path.
    * 
-   * @param destX
-   * @param destY
+   * @param destX x-axis of the destination point
+   * @param destY y-axis of the destination point
    */
   private static void selfCorrectingPath(double destX, double destY) {
     Point cur = getCurrentPoint_feet();
     Point dest = new Point(destX, destY);
-    int nrTiles = (int) Math.floor(distanceBetween(cur,dest));
-    for(int i=0; i<nrTiles; i++) {
-      Movement.moveStraightFor(TILE_SIZE - TILE_SIZE/10);
+    int nrTiles = (int) Math.floor(distanceBetween(cur, dest));
+    for (int i = 0; i < nrTiles; i++) {
+      Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
     }
   }
   
   
   // no obstacles
-  public static void driveToFirstWayPoint() {
-    Movement.moveStraightFor(TILE_SIZE / 2);
-    LightLocalizer.localize_waypoint();
-    Point p1 = new Point(14, 1); 
-    Movement.pause(3);
-    turnTo(getDestinationAngle(getCurrentPoint_feet(), p1));
-    Movement.pause(3);
-    directTravelTo(p1);
+  public static void driveToFirstWayPoint(Point destination) {
+//    Movement.moveStraightFor(TILE_SIZE / 2);
+//    LightLocalizer.localize_waypoint();
+//    Point p1 = new Point(14, 1); 
+//    Movement.pause(3);
+//    turnTo(getDestinationAngle(getCurrentPoint_feet(), p1));
+//    Movement.pause(3);
+//    directTravelTo(p1);
+    Point startPoint = getCurrentPoint_feet();
+    double travelDist = toMeters(distanceBetween(startPoint, destination));
+    double destTheta = getDestinationAngle(startPoint, destination);
+    turnTo(destTheta);
+    Movement.moveStraightFor(travelDist);
   }
-  
-  
-  
-  
-  
-  
+ 
   
   /**
    * Travels to specific destination depending on whether
@@ -432,7 +422,7 @@ public class Navigation {
    * @param tolerance tolerated difference
    * @return true if the values are roughly the same
    */
-  private static boolean roughlySame(double a, double b, double tolerance) {
+  public static boolean roughlySame(double a, double b, double tolerance) {
     double diff = Math.abs(a - b);
     return (diff < tolerance);
   }

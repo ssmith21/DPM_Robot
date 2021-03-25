@@ -28,7 +28,7 @@ public class Main {
     LightLocalizer.localize_start();
     Navigation.crossingTunnel(corner);
     odometer.printPosition();
-    //Navigation.driveToFirstWayPoint();
+    //Navigation.driveToFirstWayPoint(waypoint(0));
     //beep(3);
 
     
