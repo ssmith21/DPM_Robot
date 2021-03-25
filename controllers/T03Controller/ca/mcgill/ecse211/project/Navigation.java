@@ -9,6 +9,8 @@ import ca.mcgill.ecse211.playingfield.Point;
  */
 public class Navigation {
 
+  /** the error margin when comparing two numbers to see if they are the same. */
+  private static double smallTolerance = 0.2;
   /** a counter to make sure two points are the same. */
   public static int counter = 0;
   /** horizontal offset of robots' position for tunnel. */
@@ -105,7 +107,7 @@ public class Navigation {
       double distance = toMeters(distanceBetween(cur, dest));
 
       /* step 1 : get to tunnels' x position if not already inline */
-      if (!roughlySame(cur.x, destX, 0.2)) {
+      if (!roughlySame(cur.x, destX, smallTolerance)) {
         turnTo(destTheta);
         if (cur.x > destX) {
           Movement.moveStraightFor(distance / 2);
@@ -159,14 +161,14 @@ public class Navigation {
       double distance = toMeters(distanceBetween(cur, dest));
 
       /* step 1 : get to tunnels' y position if not already inline */
-      if (!roughlySame(cur.y, tunnel.ll.y, 0.2)) {
+      if (!roughlySame(cur.y, tunnel.ll.y, smallTolerance)) {
         turnTo(destTheta);
         Movement.moveStraightFor(distance);
         LightLocalizer.localize_waypoint_2();
       }
 
       /* step 2 : correct position and move to center of the tunnel */
-      if (!roughlySame(cur.y, tunnel.ll.y, 0.2)) {
+      if (!roughlySame(cur.y, tunnel.ll.y, smallTolerance)) {
         turnTo(180);
         LightLocalizer.alignWithLine();
         Movement.moveStraightFor(verticalOffset);
@@ -380,7 +382,7 @@ public class Navigation {
     double angleDiff = Math.abs(destTheta - xyt[2]);
 
     // case 1: we're already at the destination
-    if (travelDist < 0.2) {
+    if (travelDist < smallTolerance) {
       System.out.println("Already at destination.");
       return;
     }
@@ -435,7 +437,7 @@ public class Navigation {
     while (true) {
       Movement.drive();
       Point cur = getCurrentPoint_feet();
-      if (comparePoints(cur, destination, 0.2)) {
+      if (comparePoints(cur, destination, smallTolerance)) {
         System.out.println("Near destination, stop detecting obstacles.");
         break;
       }

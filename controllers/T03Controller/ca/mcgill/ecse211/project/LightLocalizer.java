@@ -28,11 +28,13 @@ public class LightLocalizer {
   private static float[] sensor2_data = new float[rightColorSensor.sampleSize()];
   
   /** Values to operate color sensor. */
-  private static int current_color_blue = 1000;
-  private static int current_color_red = 1000;
   private static int current_color = 1000;
   private static boolean s1Indicator = false;
   private static boolean s2Indicator = false;
+  
+  /* Value to move the robot by in order to correct its' position after each localization phase*/
+  private static double movementOffset = 0.0273;
+  
 
   
   /** This is the default constructor of this class. It cannot be accessed externally. */
@@ -79,7 +81,7 @@ public class LightLocalizer {
    * to the black line which intersects (1,1).
    */
   private static void stepOne_start() {
-    double backwardAdjustment = -0.0273;
+    double backwardAdjustment = -movementOffset;
     alignWithLine();
     moveStraightFor(backwardAdjustment);
     turnBy(90.0);
@@ -92,7 +94,7 @@ public class LightLocalizer {
    * to place the robot at (1,1,0) with reference to the odometer.
    */
   private static void stepTwo_start() {
-    double backwardAdjustment = -0.0273 * 3.5;
+    double backwardAdjustment = -movementOffset * 3.5;
     alignWithLine();
     moveStraightFor(backwardAdjustment);
     turnBy(-90.0);
@@ -103,7 +105,7 @@ public class LightLocalizer {
    * Modified the position of the robot
    */
   private static void stepOne_waypoint() {
-    double backwardAdjustment = -0.0273 * 3.5;
+    double backwardAdjustment = -movementOffset * 3.5;
     alignWithLine();
     moveStraightFor(backwardAdjustment);
     turnBy(90.0);
@@ -114,7 +116,7 @@ public class LightLocalizer {
    * Modified the position of the robot
    */
   private static void stepOne_waypoint_2() {
-    double backwardAdjustment = -0.0273 * 3.5;
+    double backwardAdjustment = -movementOffset * 3.5;
     alignWithLine();
     moveStraightFor(backwardAdjustment);
     turnBy(-90.0);
@@ -125,7 +127,7 @@ public class LightLocalizer {
    * The robot will not turn in the modified version.
    */
   private static void stepTwo_waypoint() {
-    double backwardAdjustment = -0.0273 * 3.5;
+    double backwardAdjustment = -movementOffset * 3.5;
     alignWithLine();
     moveStraightFor(backwardAdjustment);
   }

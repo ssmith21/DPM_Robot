@@ -122,6 +122,9 @@ public class AvoidObstacle {
     // y = mx + b;
     double tolerance = 0.09;
     double m = params[0];
+    
+    // if slope is 0, just compare x or y, otherwise continuously
+    // recalculate current slope to see if we've rejoined the path
     if (m == 0) {
       double xdiff = Math.abs(start.x - curr.x);
       double ydiff = Math.abs(start.y - curr.y);
@@ -231,6 +234,8 @@ public class AvoidObstacle {
    * turning left or right.
    */
   public static void correctController() {
+    
+    // value determined by trial and error.
     double initialMove = 0.06475;
     if (distance > 10 && notReturningFlag) {
             
