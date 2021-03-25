@@ -41,10 +41,10 @@ public class Navigation {
         moveToTunnel();
         if (verticalTunnel) {
           odometer.setXyt(
-              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y + (TILE_SIZE / 3)), 0);
+              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y + (TILE_SIZE / 3) + 1), 0);
         } else {
           odometer.setXyt(
-              toMeters(tunnel.ur.x + (TILE_SIZE / 3)), toMeters(tunnel.ll.y + 0.5), 90);
+              toMeters(tunnel.ur.x + (TILE_SIZE / 3) + 1), toMeters(tunnel.ll.y + 0.5), 90);
         }
         break;
       case(1):
@@ -53,10 +53,10 @@ public class Navigation {
         moveToTunnel();
         if (verticalTunnel) {
           odometer.setXyt(
-              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y + (TILE_SIZE / 3)), 0);
+              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y + (TILE_SIZE / 3) + 1), 0);
         } else {
           odometer.setXyt(
-              toMeters(tunnel.ll.x - (TILE_SIZE / 3)), toMeters(tunnel.ll.y + 0.5), 270);
+              toMeters(tunnel.ll.x - (TILE_SIZE / 3) - 1), toMeters(tunnel.ll.y + 0.5), 270);
         }
         break;
       case(2):
@@ -65,10 +65,10 @@ public class Navigation {
         moveToTunnel();
         if (verticalTunnel) {
           odometer.setXyt(
-              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y - (TILE_SIZE / 3)), 180);
+              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y - (TILE_SIZE / 3) - 1), 180);
         } else {
           odometer.setXyt(
-              toMeters(tunnel.ll.x - (TILE_SIZE / 3)), toMeters(tunnel.ll.y + 0.5), 270);
+              toMeters(tunnel.ll.x - (TILE_SIZE / 3) - 1), toMeters(tunnel.ll.y + 0.5), 270);
         }
         break;
       case(3):
@@ -77,10 +77,10 @@ public class Navigation {
         moveToTunnel();
         if (verticalTunnel) {
           odometer.setXyt(
-              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y - (TILE_SIZE / 3)), 180);
+              toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y - (TILE_SIZE / 3) - 1), 180);
         } else {
           odometer.setXyt(
-              toMeters(tunnel.ur.x + (TILE_SIZE / 3)), toMeters(tunnel.ll.y + 0.5), 90);
+              toMeters(tunnel.ur.x + (TILE_SIZE / 3) + 1), toMeters(tunnel.ll.y + 0.5), 90);
         }
         break;
       default:
@@ -134,7 +134,6 @@ public class Navigation {
       /* step 4 : approach tunnel while constantly correcting position at each tile */
       destX = cur.x;
       destY = tunnel.ur.y;
-      
       selfCorrectingPath(destX, destY);
 
       /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
@@ -207,7 +206,7 @@ public class Navigation {
   private static void selfCorrectingPath(double destX, double destY) {
     Point cur = getCurrentPoint_feet();
     Point dest = new Point(destX, destY);
-    int nrTiles = (int) Math.floor(distanceBetween(cur, dest));
+    int nrTiles = (int) Math.round(distanceBetween(cur, dest));
     for (int i = 0; i < nrTiles; i++) {
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
