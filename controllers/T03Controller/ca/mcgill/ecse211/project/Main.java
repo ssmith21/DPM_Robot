@@ -4,6 +4,7 @@ import static ca.mcgill.ecse211.project.Movement.*;
 import static ca.mcgill.ecse211.project.Resources.*;
 
 import java.lang.Thread;
+import ca.mcgill.ecse211.playingfield.Point;
 import simlejos.ExecutionController;
 
 /**
@@ -21,18 +22,20 @@ public class Main {
     // Start the odometer thread and update the number of threads
     new Thread(odometer).start();
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
-
-    // TODO Replace these method calls with your own logic
+    
     beep(3);
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
+    Point startingPoint = Navigation.getCurrentPoint_feet();
+
+    
     Navigation.crossingTunnel(corner);
     println("Done crossing tunnel");
     odometer.printPosition();
     Navigation.driveToFirstWayPoint(waypoint(0));
     odometer.printPositionInTileLengths();
     beep(3);
-    Navigation.moveBackToTunnel();
+    Navigation.moveBackToStart(startingPoint);
 
     
     System.exit(0);
