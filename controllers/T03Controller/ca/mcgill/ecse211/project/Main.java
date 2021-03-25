@@ -32,6 +32,7 @@ public class Main {
     Navigation.driveToFirstWayPoint(waypoint(0));
     odometer.printPositionInTileLengths();
     beep(3);
+    Navigation.moveBackToTunnel();
 
     
     System.exit(0);

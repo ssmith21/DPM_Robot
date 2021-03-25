@@ -199,6 +199,53 @@ public class Navigation {
     }
   }
   
+  public static void moveBackToTunnel() {
+    if(verticalTunnel) {
+      
+    } else {
+      Point cur = getCurrentPoint_feet();
+      double destX;
+      double destY;
+      double distance;
+      
+      // step 1: Align with y-axis of tunnel
+      if(tunnel.ur.y == 9) { // if tunnel is along the top wall of the playground
+        turnTo(0);
+        destX = cur.x;
+        destY = tunnel.ll.y;
+        Point dest = new Point(destX, destY);
+        LightLocalizer.alignWithLine();
+        cur = getCurrentPoint_feet();
+        distance = toMeters(distanceBetween(cur,dest));
+        Movement.moveStraightFor(distance-TILE_SIZE/10);
+        Movement.pause(4);
+        LightLocalizer.localize_waypoint_2();
+        odometer.setXyt(cur.x, tunnel.ll.y, 270);
+      }
+      
+      // step 2: Align with center of the tunnel
+      turnTo(0);
+      LightLocalizer.alignWithLine();
+      Movement.moveStraightFor(verticalOffset);
+      //Movement.moveStraightFor(horizontalOffset);
+      
+      // step 3: Turn to tunnel and assure we're going straight on
+      turnTo(270);
+      LightLocalizer.alignWithLine();
+      
+      // step 4: Drive towards tunnel
+      cur = getCurrentPoint_feet();
+      destX = tunnel.ur.x;
+      destY = cur.y;
+      Movement.pause(3);
+      println("================================================");
+      selfCorrectingPath(destX, destY);
+      
+      
+      println("Done step 1 of moving back");
+    }
+  }
+  
   
   /**
    * Travel along the x or y axis direction of the playing field while constantly
@@ -213,6 +260,8 @@ public class Navigation {
   private static void selfCorrectingPath(double destX, double destY) {
     Point cur = getCurrentPoint_feet();
     Point dest = new Point(destX, destY);
+    println(cur);
+    println(dest);
     println(distanceBetween(cur, dest));
     int nrTiles = (int) Math.round(distanceBetween(cur, dest));
     for (int i = 0; i < nrTiles; i++) {
