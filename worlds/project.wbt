@@ -36,8 +36,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.9988943969225703 -0.007431604584308048 -0.046419339180960584 0.3178455334521538
-  position 0.7790960787972286 0.7887673065463341 4.147380825202486
+  orientation 0.9999370992884772 -0.0018145806667886292 -0.01106818700373969 0.32502008598052684
+  position 4.26784178833502 1.340108234120922 5.038563154893808
 }
 TexturedBackground {
 }
@@ -309,6 +309,9 @@ DPM-Robot {
   translation 0.175383 2.58542 0.0630702
   rotation -0.008963917937766087 0.01192039725760012 0.9998887699661527 -2.358015307179586
   children [
+    T03BaseOfRobot-solid {
+      translation 0 0.008 -0.0137
+    }
     EV3-ColorSensor {
       name "S3"
       translation -0.083 -0.032 -0.018
@@ -328,14 +331,12 @@ DPM-Robot {
       rotation 0 1 0 -1.5707953071795862
       position 0.0018201032194750122
       children [
+        T03UltrasonicsensorMount-solid {
+        }
         EV3-Ultrasonic {
           name "S1"
           translation 0.028 0.012 -0.0081
           rotation 0.707108281185553 3.3905113482557537e-09 0.70710528118436 3.14159
-        }
-        desing2Sub2-solid {
-          translation 0.0161 0.0004 -0.0001
-          rotation 0 1 0 1.5708
         }
       ]
     }
@@ -361,9 +362,6 @@ DPM-Robot {
           rotation 0 0 -1 1.5708
         }
       ]
-    }
-    desing2Sub1-solid {
-      translation 0 0.008 -0.0137
     }
     EV3 {
     }

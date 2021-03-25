@@ -6,8 +6,8 @@
 # LeoCAD is distributed under the GNU General Public License (GPL) version 2.
 # The Parts Library used by LeoCAD is a copy of LDraw's Library, which is distributed under the LDraw License Agreement and based on the Creative Commons 2 License.
 # LEGO(R) is a trademark of the LEGO Group of companies which does not sponsor, authorize or endorse this file.
-PROTO desing2Sub1-solid [
-	field SFString   name     "desing2Sub1-solid"
+PROTO T03UltrasonicsensorMount-solid [
+	field SFString   name     "T03UltrasonicsensorMount-solid"
 	field SFVec3f    translation   0 0 0
 	field SFRotation rotation      0 0 1 0
 ]
@@ -17,14 +17,14 @@ PROTO desing2Sub1-solid [
 		rotation IS rotation
 		translation IS translation
 		children [
-			desing2Sub1-shape{
+			T03UltrasonicsensorMount-shape{
 			}
 		]
-		boundingObject desing2Sub1-boundingbox {
+		boundingObject T03UltrasonicsensorMount-boundingbox {
 		}
 		physics Physics {
 			density -1
-			mass 27.432123
+			mass 2.004496
 		}
 	}
 }

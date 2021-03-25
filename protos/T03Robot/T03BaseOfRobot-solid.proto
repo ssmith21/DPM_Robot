@@ -6,10 +6,25 @@
 # LeoCAD is distributed under the GNU General Public License (GPL) version 2.
 # The Parts Library used by LeoCAD is a copy of LDraw's Library, which is distributed under the LDraw License Agreement and based on the Creative Commons 2 License.
 # LEGO(R) is a trademark of the LEGO Group of companies which does not sponsor, authorize or endorse this file.
-PROTO desing2Sub2-boundingbox [
+PROTO T03BaseOfRobot-solid [
+	field SFString   name     "T03BaseOfRobot-solid"
+	field SFVec3f    translation   0 0 0
+	field SFRotation rotation      0 0 1 0
 ]
 {
-		Box {
-			size 0.023850 0.023850 0.007950
+	Solid {
+		name IS name
+		rotation IS rotation
+		translation IS translation
+		children [
+			T03BaseOfRobot-shape{
+			}
+		]
+		boundingObject T03BaseOfRobot-boundingbox {
 		}
+		physics Physics {
+			density -1
+			mass 27.432123
+		}
+	}
 }

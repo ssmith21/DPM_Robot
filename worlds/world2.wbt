@@ -36,8 +36,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0 1 0 0
-  position 0.5212261493722603 2.248497568911619 5.08833044952101
+  orientation 0.9997244986737878 -0.009997578241580065 -0.02123617622706816 0.8802123874799265
+  position 0.6706453174309537 -1.644085229852115 3.409985457645891
 }
 TexturedBackground {
 }
@@ -217,11 +217,14 @@ DEF ARENA DPM-CompetitionArena {
   tileColor_14_8 0.5 1 0.5
 }
 DPM-Robot {
-  hidden rotation_8 0.9261953444118205 -0.3743745729561564 -0.04478686318290796 6.026279557307736
+  hidden rotation_9 0.08148526016595582 0.897593472440206 0.43322755061101503 3.4760930051531775
   name "T03Robot"
-  translation 0.13302 2.61376 0.0616667
+  translation 0.175383 2.58542 0.0630702
   rotation -0.008963917937766087 0.01192039725760012 0.9998887699661527 -2.358015307179586
   children [
+    T03BaseOfRobot-solid {
+      translation 0 0.008 -0.0137
+    }
     EV3-ColorSensor {
       name "S3"
       translation -0.083 -0.032 -0.018
@@ -241,14 +244,14 @@ DPM-Robot {
       rotation 0 1 0 -1.5707953071795862
       position 0.0018201032194750122
       children [
+        T03UltrasonicsensorMount-solid {
+          translation 0.016 0.001 -0.001
+          rotation 0 1 0 1.5708
+        }
         EV3-Ultrasonic {
           name "S1"
           translation 0.028 0.012 -0.0081
           rotation 0.707108281185553 3.3905113482557537e-09 0.70710528118436 3.14159
-        }
-        desing2Sub2-solid {
-          translation 0.0161 0.0004 -0.0001
-          rotation 0 1 0 1.5708
         }
       ]
     }
@@ -274,9 +277,6 @@ DPM-Robot {
           rotation 0 0 -1 1.5708
         }
       ]
-    }
-    desing2Sub1-solid {
-      translation 0 0.008 -0.0137
     }
     EV3 {
     }
