@@ -19,10 +19,6 @@ public class Navigation {
   public static int horizontalOrientation = (corner == 0 || corner == 3) ? 90 : 270;
   /** vertical tunnel orientation. */
   public static int verticalOrientation = (corner == 2 || corner == 3) ? 180 : 0;
-  /** final orientation after passing horizontal tunnel. */
-  public static int fhorizontalOrientation = (corner == 0 || corner == 2) ? 90 : 270;
-  /** final orientation after passing vertical tunnel. */
-  public static int fverticaltalOrientation = (corner == 2 || corner == 3) ? 180 : 0; 
   
   
   /** Do not instantiate this class. */
