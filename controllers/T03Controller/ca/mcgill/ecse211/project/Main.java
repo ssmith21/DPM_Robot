@@ -3,8 +3,8 @@ package ca.mcgill.ecse211.project;
 import static ca.mcgill.ecse211.project.Movement.*;
 import static ca.mcgill.ecse211.project.Resources.*;
 
-import java.lang.Thread;
 import ca.mcgill.ecse211.playingfield.Point;
+import java.lang.Thread;
 import simlejos.ExecutionController;
 
 /**
@@ -23,12 +23,27 @@ public class Main {
     new Thread(odometer).start();
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
     
+    Point startingPoint = new Point(0, 0);
+    switch (corner) {
+      case(0):
+        startingPoint = new Point(0.5, 0.5);
+        break;
+      case(1):
+        startingPoint = new Point(14.5, 0.5);
+        break;
+      case(2):
+        startingPoint = new Point(14.5, 8.5);
+        break;
+      case(3):
+        startingPoint = new Point(0.5, 8.5);
+        break;
+      default:
+        errPrintln("Error getting starting corner");
+    }
+    
     beep(3);
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
-    Point startingPoint = Navigation.getCurrentPoint_feet();
-
-    
     Navigation.crossingTunnel(corner);
     println("Done crossing tunnel");
     odometer.printPosition();

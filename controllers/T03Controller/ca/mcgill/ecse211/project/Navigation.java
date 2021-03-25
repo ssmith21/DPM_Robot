@@ -209,16 +209,15 @@ public class Navigation {
       double distance;
       
       /* step 1: Align with y-axis of tunnel */
-      if(tunnel.ur.y == 9) { // if tunnel is along the top wall of the playground
+      if (tunnel.ur.y == 9) { // if tunnel is along the top wall of the playground
         turnTo(0);
         destX = cur.x;
         destY = tunnel.ll.y;
         Point dest = new Point(destX, destY);
         LightLocalizer.alignWithLine();
         cur = getCurrentPoint_feet();
-        distance = toMeters(distanceBetween(cur,dest));
-        Movement.moveStraightFor(distance-TILE_SIZE/10);
-        Movement.pause(4);
+        distance = toMeters(distanceBetween(cur, dest));
+        Movement.moveStraightFor(distance - (TILE_SIZE / 10));
         LightLocalizer.localize_waypoint_2();
         odometer.setXyt(toMeters(cur.x), toMeters(tunnel.ll.y), 270);
       }
@@ -251,7 +250,7 @@ public class Navigation {
       /* Step 7: Return to starting point */
       cur = getCurrentPoint_feet();
       double destTheta = getDestinationAngle(cur, start);
-      distance = toMeters(distanceBetween(cur,start));
+      distance = toMeters(distanceBetween(cur, start));
       turnTo(destTheta);
       Movement.moveStraightFor(distance);
     }
@@ -281,20 +280,11 @@ public class Navigation {
   
   // no obstacles
   public static void driveToFirstWayPoint(Point destination) {
-//    Movement.moveStraightFor(TILE_SIZE / 2);
-//    LightLocalizer.localize_waypoint();
-//    Point p1 = new Point(14, 1); 
-//    Movement.pause(3);
-//    turnTo(getDestinationAngle(getCurrentPoint_feet(), p1));
-//    Movement.pause(3);
-//    directTravelTo(p1);
     Point startPoint = getCurrentPoint_feet();
     double travelDist = toMeters(distanceBetween(startPoint, destination));
     double destTheta = getDestinationAngle(startPoint, destination);
     turnTo(destTheta);
     Movement.moveStraightFor(travelDist);
-//    odometer.setX(destination.x);
-//    odometer.setY(destination.y);
   }
  
   
