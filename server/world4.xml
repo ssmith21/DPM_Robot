@@ -30,20 +30,20 @@
 <value key="Island_UR_y">9</value>
 
 
-<value key="TNR_LL_x">8</value>
-<value key="TNR_LL_y">8</value>
+<value key="TNR_LL_x">2</value>
+<value key="TNR_LL_y">3</value>
 
 
-<value key="TNR_UR_x">10</value>
-<value key="TNR_UR_y">9</value>
+<value key="TNR_UR_x">3</value>
+<value key="TNR_UR_y">5</value>
 
 
-<value key="TNG_LL_x">8</value>
-<value key="TNG_LL_y">6</value>
+<value key="TNG_LL_x">5</value>
+<value key="TNG_LL_y">3</value>
 
 
-<value key="TNG_UR_x">10</value>
-<value key="TNG_UR_y">7</value>
+<value key="TNG_UR_x">6</value>
+<value key="TNG_UR_y">5</value>
 
 
 <value key="OP_A_x">NaN</value>
@@ -54,7 +54,7 @@
 <value key="OP_B_y">NaN</value>
 
 
-<value key="WP_0_x">11</value>
+<value key="WP_0_x">2</value>
 <value key="WP_0_y">1</value>
 
 
