@@ -9,8 +9,10 @@ import simlejos.ExecutionController;
 
 /**
  * Main class of the program.
- *
- * TODO Describe your project overview in detail here (in this Javadoc comment).
+ * The robot starts at one of the 4 corners of the competition area.
+ * Then it localizes itself and moves toward the tunnel.
+ * It should do as many laps as possible and go back to starting point.
+ * It will avoid all the obstacles in its way.
  */
 public class Main {
 
@@ -45,7 +47,9 @@ public class Main {
     LightLocalizer.localize_start();
     beep(3);
     Navigation.crossingTunnel(corner);
+    println("Moving to: " + waypoint(0));
     Navigation.driveToFirstWayPoint(waypoint(0));
+    println("Reached the first waypoint");
     beep(3);
     Navigation.moveBackToStart(startingPoint, waypoint(0));
 
