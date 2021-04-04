@@ -5,13 +5,6 @@ import ca.mcgill.ecse211.playingfield.Overpass;
 import ca.mcgill.ecse211.playingfield.Point;
 import ca.mcgill.ecse211.playingfield.Region;
 import ca.mcgill.ecse211.wificlient.WifiConnection;
-import static ca.mcgill.ecse211.project.Resources.greenCorner;
-import static ca.mcgill.ecse211.project.Resources.greenTeam;
-import static ca.mcgill.ecse211.project.Resources.redCorner;
-import static ca.mcgill.ecse211.project.Resources.redTeam;
-import static ca.mcgill.ecse211.project.Resources.tng;
-import static ca.mcgill.ecse211.project.Resources.tnr;
-import static ca.mcgill.ecse211.project.Resources.tunnel;
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.List;
@@ -358,7 +351,7 @@ public class Resources {
       }
     } else {
       ps.print(teamN + ": ");
-      for (var o: objects) {
+      for (var o : objects) {
         ps.print(o + " ");
       }
       if (printNewlines) {
