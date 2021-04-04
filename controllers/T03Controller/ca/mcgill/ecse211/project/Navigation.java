@@ -416,9 +416,11 @@ public class Navigation {
   
   public static void doLap(List<Point> waypoints) {
     for(int i=0; i<waypoints.size(); i++) {
+      println("\nWaypoint "+i);
       odometer.printPositionInTileLengths();
       println("Travelling to waypoint"+waypoints.get(i));
       travelTo(waypoints.get(i));
+      println("Currently at waypoint "+waypoints.get(i)+"\n");
     }
   }
   
@@ -471,17 +473,20 @@ public class Navigation {
       travelToObstacle(destination);
     }
 
-    double tolerance = 1.0;
+    double tolerance = 1.0; // 1 tile
     if ((roughlySame(startPoint.x, destination.x, tolerance)
         || roughlySame(startPoint.y, destination.y, tolerance))
         && counter < 4
         ) {
       counter++;
       LightLocalizer.localize_waypoint();
+//      odometer.setX(toMeters(destination.x));
+//      odometer.setY(toMeters(destination.y));
+//      odometer.setTheta(getDestinationAngle(startPoint, destination));
     }
-    odometer.setX(toMeters(destination.x));
-    odometer.setY(toMeters(destination.y));
-    odometer.setTheta(getDestinationAngle(startPoint, destination) + 90);
+//    odometer.setX(toMeters(destination.x));
+//    odometer.setY(toMeters(destination.y));
+//    odometer.setTheta(getDestinationAngle(startPoint, destination));
     Movement.pause(1);
   }
 
