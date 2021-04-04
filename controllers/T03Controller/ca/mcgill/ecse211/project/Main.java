@@ -51,6 +51,10 @@ public class Main {
     Navigation.driveToFirstWayPoint(waypoint(0));
     println("Reached the first waypoint");
     beep(3);
+    for (int i = 1; i < 20; i++) {
+      Navigation.travelTo(waypoint(i));
+    }
+    Navigation.travelTo(waypoint(0));
     Navigation.moveBackToStart(startingPoint, waypoint(0));
 
     

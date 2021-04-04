@@ -42,7 +42,7 @@ public class Navigation {
         println("Bottom left");
         odometer.setXyt(toMeters(1), toMeters(1), 0);
         odometer.printPosition();
-        moveToTunnel();
+        moveToTunnel(startingCorner);
         if (verticalTunnel) {
           odometer.setXyt(
               toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y + (TILE_SIZE / 3) + 1), 0);
@@ -55,7 +55,7 @@ public class Navigation {
         println("Bottom right");
         odometer.setXyt(toMeters(14), toMeters(1), 270);
         odometer.printPosition();
-        moveToTunnel();
+        moveToTunnel(startingCorner);
         if (verticalTunnel) {
           odometer.setXyt(
               toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ur.y + (TILE_SIZE / 3) + 1), 0);
@@ -68,7 +68,7 @@ public class Navigation {
         println("Top right");
         odometer.setXyt(toMeters(14), toMeters(8), 180);
         odometer.printPosition();
-        moveToTunnel();
+        moveToTunnel(startingCorner);
         if (verticalTunnel) {
           odometer.setXyt(
               toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y - (TILE_SIZE / 3) - 1), 180);
@@ -81,7 +81,7 @@ public class Navigation {
         println("Top left");
         odometer.setXyt(toMeters(1), toMeters(8), 90);
         odometer.printPosition();
-        moveToTunnel();
+        moveToTunnel(startingCorner);
         if (verticalTunnel) {
           odometer.setXyt(
               toMeters(tunnel.ll.x + 0.5), toMeters(tunnel.ll.y - (TILE_SIZE / 3) - 1), 180);
@@ -94,13 +94,19 @@ public class Navigation {
         errPrintln("Error getting starting corner");
     }
   }
-
+  //Problems:
+  //World14(Vertical tunnel Top right corner): Left Tunnel
+  //World10(Vertical tunnel Bottom right corner): Left Tunnel
+  //World9(Horizontal tunnel Bottom right corner): Top Tunnel
+  //World8(Horizontal tunnel Bottom left corner): Top Tunnel
+  //World7(Vertical tunnel Bottom left corner): Left Tunnel
+  
   /**
    * Helps the robot to travel through the tunnel depending on what corner the robot is placed at.
    * The movement depends on the corner and orientation of the tunnel.
    * 
    */
-  public static void moveToTunnel() {
+  public static void moveToTunnel(int startingCorner) {
     if (verticalTunnel) {
       /* step 0 : preliminary calculations */
       Point cur = getCurrentPoint_feet();
@@ -141,23 +147,15 @@ public class Navigation {
       println("Done Step 3. Odometer : ");
       odometer.printPosition();
 
-      /* step 4 : approach tunnel while constantly correcting position at each tile */
+      /* step 4 : travel through tunnel while constantly correcting position at each tile */
       cur = getCurrentPoint_feet();
       destX = cur.x;
-      destY = tunnel.ur.y;
+      destY = (startingCorner == 0 || startingCorner == 1) ? tunnel.ur.y : tunnel.ll.y;
       selfCorrectingPath(destX, destY);
       println("Done Step 4. Odometer : ");
       odometer.printPosition();
 
-      /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
-      cur = getCurrentPoint_feet();
-      destX = cur.x;
-      destY = tunnel.ll.y;
-      selfCorrectingPath(destX, destY);
-      println("Done Step 5. Odometer : ");
-      odometer.printPosition();
-
-      /* step 6 : move for 90% of one additional tile and align with line. */
+      /* step 5 : move for 90% of one additional tile and align with line. */
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
       println("Done Step 6. Odometer : ");
@@ -200,20 +198,12 @@ public class Navigation {
       println("Done Step 3. Odometer : ");
       odometer.printPosition();
 
-      /* step 4 : approach tunnel while constantly correcting position at each tile */
+      /* step 4 : travel through tunnel while constantly correcting position at each tile */
       cur = getCurrentPoint_feet();
-      destX = tunnel.ll.x;
+      destX = (startingCorner == 1 || startingCorner == 2) ? tunnel.ll.x : tunnel.ur.x;
       destY = cur.y;
       selfCorrectingPath(destX, destY);
       println("Done Step 4. Odometer : ");
-      odometer.printPosition();
-
-      /* step 5 : travel through the tunnel, constantly correcting its' position at each tile */
-      cur = getCurrentPoint_feet();
-      destX = tunnel.ur.x;
-      destY = cur.y;
-      selfCorrectingPath(destX, destY);
-      println("Done Step 5. Odometer : ");
       odometer.printPosition();
 
       /* step 6 : move for 90% of one additional tile and align with line. */
