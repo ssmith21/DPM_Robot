@@ -1,8 +1,10 @@
 package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
-import java.util.List;
+
 import ca.mcgill.ecse211.playingfield.Point;
+import java.util.List;
+
 
 /**
  * The Navigation class is used to make the robot navigate around the playing field.
@@ -95,12 +97,9 @@ public class Navigation {
     }
   }
   //Problems:
-  //World14(Vertical tunnel Top right corner): Left Tunnel
-  //World10(Vertical tunnel Bottom right corner): Left Tunnel
   //World9(Horizontal tunnel Bottom right corner): Top Tunnel
   //World8(Horizontal tunnel Bottom left corner): Top Tunnel
-  //World7(Vertical tunnel Bottom left corner): Left Tunnel
-  
+
   /**
    * Helps the robot to travel through the tunnel depending on what corner the robot is placed at.
    * The movement depends on the corner and orientation of the tunnel.
@@ -129,7 +128,6 @@ public class Navigation {
         }
       }
       println("Done Step 1. Odometer : ");
-      Movement.pause(5);
       odometer.printPosition();
       
       /* step 2 : correct position and move to center of the tunnel */
@@ -140,7 +138,7 @@ public class Navigation {
         Movement.moveStraightFor(verticalOffset);
       } else {
         turnTo(270);
-        if(startingCorner != 1) {
+        if (startingCorner != 1) {
           Movement.moveStraightFor(verticalOffset);
         }
       }
@@ -179,15 +177,23 @@ public class Navigation {
       /* step 1 : get to tunnels' y position if not already inline */
       if (!roughlySame(cur.y, tunnel.ll.y, smallTolerance)) {
         turnTo(destTheta);
-        Movement.moveStraightFor(distance);
-        LightLocalizer.localize_waypoint_2();
+        if (cur.y < destY) {
+          Movement.moveStraightFor(distance - TILE_SIZE);
+        } else {
+          Movement.moveStraightFor(distance);
+        }   
       }
+      Movement.pause(5);
       println("Done Step 1. Odometer : ");      
       odometer.printPosition();
 
       /* step 2 : correct position and move to center of the tunnel */
       if (!roughlySame(cur.y, tunnel.ll.y, smallTolerance)) {
-        turnTo(180);
+        if ((startingCorner == 0 || startingCorner == 1) && cur.y < destY) {
+          turnTo(0);
+        } else {
+          turnTo(180);
+        }
         LightLocalizer.alignWithLine();
         Movement.moveStraightFor(verticalOffset);
       } else {
