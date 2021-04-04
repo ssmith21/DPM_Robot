@@ -121,7 +121,7 @@ public class Navigation {
         turnTo(destTheta);
         if (cur.x > destX) {
           Movement.moveStraightFor(distance - (TILE_SIZE / 2));
-          if (startingCorner == 2 || startingCorner == 0) {
+          if (startingCorner == 2 || startingCorner == 1 || startingCorner == 0) {
             Movement.moveStraightFor(-verticalOffset);
           }
         } else {
@@ -129,6 +129,7 @@ public class Navigation {
         }
       }
       println("Done Step 1. Odometer : ");
+      Movement.pause(5);
       odometer.printPosition();
       
       /* step 2 : correct position and move to center of the tunnel */
@@ -139,7 +140,9 @@ public class Navigation {
         Movement.moveStraightFor(verticalOffset);
       } else {
         turnTo(270);
-        Movement.moveStraightFor(verticalOffset);
+        if(startingCorner != 1) {
+          Movement.moveStraightFor(verticalOffset);
+        }
       }
       println("Done Step 2. Odometer : ");
       odometer.printPosition();
