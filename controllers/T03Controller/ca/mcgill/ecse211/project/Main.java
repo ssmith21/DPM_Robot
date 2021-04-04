@@ -24,27 +24,28 @@ public class Main {
     // Start the odometer thread and update the number of threads
     new Thread(odometer).start();
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
-    
-    Point startingPoint = new Point(0, 0);
-    switch (corner) {
-      case(0):
-        startingPoint = new Point(0.5, 0.5);
-        break;
-      case(1):
-        startingPoint = new Point(14.5, 0.5);
-        break;
-      case(2):
-        startingPoint = new Point(14.5, 8.5);
-        break;
-      case(3):
-        startingPoint = new Point(0.5, 8.5);
-        break;
-      default:
-        errPrintln("Error getting starting corner");
-    }
-    
+        
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
+    
+    Navigation.getToIsland(corner);
+    println("Got to island");
+    odometer.printPositionInTileLengths();
+    Movement.pause(5);
+    Navigation.doLap(waypoints);
+    
+    System.exit(0);
+  }
+  
+ 
+  
+  public static void getToIsland(Point startingPoint) {
+    beep(3);
+    Navigation.crossingTunnel(corner);
+    println("===========================\nMoving to: " + waypoint(0));
+  }
+
+  public static void betaDemo(Point startingPoint) {
     beep(3);
     Navigation.crossingTunnel(corner);
     println("Moving to: " + waypoint(0));
@@ -56,11 +57,7 @@ public class Main {
     }
     Navigation.travelTo(waypoint(0));
     Navigation.moveBackToStart(startingPoint, waypoint(0));
-
-    
-    System.exit(0);
   }
-
   
   /**
    * Example using WifiConnection to communicate with a server and receive data concerning the

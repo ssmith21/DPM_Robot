@@ -1,7 +1,7 @@
 package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
-
+import java.util.List;
 import ca.mcgill.ecse211.playingfield.Point;
 
 /**
@@ -373,7 +373,6 @@ public class Navigation {
     }
   }
 
-
   /**
    * Travel along the x or y axis direction of the playing field while constantly
    * correcting its' path, to make sure that we're traveling directly along the 
@@ -394,7 +393,35 @@ public class Navigation {
     }
   }
 
-
+  public static void getToIsland(int corner) {
+    Point startingPoint = new Point(-1,-1);
+    switch (corner) {
+      case(0):
+        startingPoint = new Point(0.5, 0.5);
+        break;
+      case(1):
+        startingPoint = new Point(14.5, 0.5);
+        break;
+      case(2):
+        startingPoint = new Point(14.5, 8.5);
+        break;
+      case(3):
+        startingPoint = new Point(0.5, 8.5);
+        break;
+      default:
+        errPrintln("Error getting starting corner");
+    }
+    crossingTunnel(corner);
+  }
+  
+  public static void doLap(List<Point> waypoints) {
+    for(int i=0; i<waypoints.size(); i++) {
+      odometer.printPositionInTileLengths();
+      println("Travelling to waypoint"+waypoints.get(i));
+      travelTo(waypoints.get(i));
+    }
+  }
+  
 
   /**
    * Travel to the first point after passing the tunnel.
@@ -407,6 +434,8 @@ public class Navigation {
     turnTo(destTheta);
     Movement.moveStraightFor(travelDist);
   }
+  
+//  public static void 
 
 
   /**
@@ -429,23 +458,20 @@ public class Navigation {
 
     // case 1: we're already at the destination
     if (travelDist < smallTolerance) {
-      System.out.println("Already at destination.");
       return;
     }
 
     // case 2: we're facing the right way
     if (angleDiff < 5.0 || angleDiff > 355.0) {
-      System.out.println("Already Pointing in the right direction, might have obstacles ahead.");
       travelToObstacle(destination);
 
       // case 3: we have to turn.
     } else {
-      System.out.println("Destination might have obstacles ahead.");
       turnTo(destTheta);
       travelToObstacle(destination);
     }
 
-    double tolerance = 0.4;
+    double tolerance = 1.0;
     if ((roughlySame(startPoint.x, destination.x, tolerance)
         || roughlySame(startPoint.y, destination.y, tolerance))
         && counter < 4
@@ -467,9 +493,6 @@ public class Navigation {
     Point curPoint = getCurrentPoint_feet();
     double travelDist = distanceBetween(curPoint, destination);
     Movement.moveStraightFor(toMeters(travelDist));
-    //odometer.setX(toMeters(destination.x));
-    //odometer.setY(toMeters(destination.y));
-    //odometer.setTheta(getDestinationAngle(curPoint, destination) + 90);
   }
 
   /**
@@ -484,7 +507,6 @@ public class Navigation {
       Movement.drive();
       Point cur = getCurrentPoint_feet();
       if (comparePoints(cur, destination, smallTolerance)) {
-        System.out.println("Near destination, stop detecting obstacles.");
         break;
       }
       if (AvoidObstacle.readUsDistance() < 11) {
@@ -497,9 +519,6 @@ public class Navigation {
       }
     }
     Point c = getCurrentPoint_feet();
-    System.out.println("Currently at (" + c.x + "," + c.y
-        + ")\tTravelling to (" + destination.x + "," + destination.y
-        + ")\t Distance = " + distanceBetween(c, destination));
 
     if (distanceBetween(c, destination) < 0.5) {
       directTravelTo(destination);
