@@ -120,7 +120,10 @@ public class Navigation {
       if (!roughlySame(cur.x, destX, smallTolerance)) {
         turnTo(destTheta);
         if (cur.x > destX) {
-          Movement.moveStraightFor(distance / 2);
+          Movement.moveStraightFor(distance - (TILE_SIZE / 2));
+          if (startingCorner == 2 || startingCorner == 0) {
+            Movement.moveStraightFor(-verticalOffset);
+          }
         } else {
           Movement.moveStraightFor(distance);
         }
