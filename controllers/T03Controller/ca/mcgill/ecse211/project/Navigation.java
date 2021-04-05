@@ -36,28 +36,21 @@ public class Navigation {
     driveToFirstWayPoint(waypoints.get(0));
     LightLocalizer.localize_waypoint();
     
-    for(int i=1; i<waypoints.size(); i++) {
-      travelTo(waypoints.get(i));
-      
-      // now waypoints.get(i) is current position, i+1 is the destination.
-      boolean overpassExists = checkForOverpass(waypoints.get(i), waypoints.get(i+1));
+    //println("Driving to "+waypoints.get(i+1));
+    
+    boolean overpassExists = false;
+    for(int i = 0; i < waypoints.size()-1; i++) { // i is the current waypoint index.
       try {
-        if(overpassExists) {
-          Movement.setMotorSpeeds(50);
-          driveOverpass();
-          travelTo(waypoints.get(i+1));
-          i++;
-          Movement.setMotorSpeeds(FORWARD_SPEED);
-        }
-      }catch(Exception e) {
-        // do nothing
-      }
-
-      
-      //if(i<waypoints.size()-1) {}
-      
-      
-      
+        overpassExists = checkForOverpass(waypoints.get(i),waypoints.get(i+1));
+      } catch(ArrayIndexOutOfBoundsException e) {}
+      if(overpassExists) {
+        println("Driving over overpass then travelling to "+waypoints.get(i+1));
+        driveOverpass();
+        travelTo(waypoints.get(i+1));
+      } else {
+        println("Travelling to "+waypoints.get(i+1));
+        travelTo(waypoints.get(i+1));
+      } 
     }
   }
   
@@ -78,12 +71,17 @@ public class Navigation {
     Movement.moveStraightFor(0.2);
     
     /* Step 3: drive over the overpass carefully */
-//    Movement.setMotorSpeeds(10);
     destTheta = getDestinationAngle(overpassStart, overpassEnd);
     turnTo(destTheta);
     directTravelTo(overpassEnd);
-//    Movement.setMotorSpeeds(FORWARD_SPEED);
-
+    odometer.setX(toFeet(overpassEnd.x));
+    odometer.setY(toFeet(overpassEnd.y));
+    
+    /* step 4: drive slightly forwards, since the robot always arrives slightly short */
+    Movement.moveStraightFor(0.25);
+    
+    odometer.printPositionInTileLengths();
+    
   }
   
   public static boolean checkForOverpass(Point cur, Point dest) {
@@ -205,8 +203,7 @@ public class Navigation {
           Movement.moveStraightFor(distance);
         }
       }
-      println("Done Step 1. Odometer : ");
-      odometer.printPosition();
+      println("Done Step 1");
       
       /* step 2 : correct position and move to center of the tunnel */
       cur = getCurrentPoint_feet();
@@ -220,28 +217,24 @@ public class Navigation {
           Movement.moveStraightFor(verticalOffset);
         }
       }
-      println("Done Step 2. Odometer : ");
-      odometer.printPosition();
+      println("Done Step 2");
       
       /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
       turnTo(verticalOrientation);
       LightLocalizer.alignWithLine();
-      println("Done Step 3. Odometer : ");
-      odometer.printPosition();
+      println("Done Step 3");
 
       /* step 4 : travel through tunnel while constantly correcting position at each tile */
       cur = getCurrentPoint_feet();
       destX = cur.x;
       destY = (startingCorner == 0 || startingCorner == 1) ? tunnel.ur.y : tunnel.ll.y;
       selfCorrectingPath(destX, destY);
-      println("Done Step 4. Odometer : ");
-      odometer.printPosition();
+      println("Done Step 4");
 
       /* step 5 : move for 90% of one additional tile and align with line. */
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
-      println("Done Step 6. Odometer : ");
-      odometer.printPosition();
+      println("Done Step 5");
 
     } else {
       /* step 0 : preliminary calculations */
@@ -262,8 +255,7 @@ public class Navigation {
         }   
       }
       Movement.pause(5);
-      println("Done Step 1. Odometer : ");      
-      odometer.printPosition();
+      println("Done Step 1");      
 
       /* step 2 : correct position and move to center of the tunnel */
       if (!roughlySame(cur.y, tunnel.ll.y, smallTolerance)) {
@@ -279,31 +271,27 @@ public class Navigation {
         LightLocalizer.alignWithLine();
         Movement.moveStraightFor(verticalOffset);
       }
-      println("Done Step 2. Odometer : ");
-      odometer.printPosition();
+      println("Done Step 2");
 
       /* step 3 : point towards tunnel and ensure we're point straight through the tunnel */
       turnTo(horizontalOrientation);
       LightLocalizer.alignWithLine();
-      println("Done Step 3. Odometer : ");
-      odometer.printPosition();
+      println("Done Step 3");
 
       /* step 4 : travel through tunnel while constantly correcting position at each tile */
       cur = getCurrentPoint_feet();
       destX = (startingCorner == 1 || startingCorner == 2) ? tunnel.ll.x : tunnel.ur.x;
       destY = cur.y;
       selfCorrectingPath(destX, destY);
-      println("Done Step 4. Odometer : ");
-      odometer.printPosition();
+      println("Done Step 4");
 
-      /* step 6 : move for 90% of one additional tile and align with line. */
+      /* step 5 : move for 90% of one additional tile and align with line. */
       Movement.moveStraightFor(TILE_SIZE - TILE_SIZE / 10);
       LightLocalizer.alignWithLine();
-      println("Done Step 6. Odometer : ");
-      odometer.printPosition();
+      println("Done Step 5");
       
     }
-    Movement.moveStraightFor(-TILE_SIZE / 5);
+    Movement.moveStraightFor(-TILE_SIZE / 5); // ensure we're behind black line for light localization
 
   }
 
