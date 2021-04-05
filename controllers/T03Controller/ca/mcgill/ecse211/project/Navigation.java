@@ -32,12 +32,16 @@ public class Navigation {
   /** Do not instantiate this class. */
   private Navigation() {}
 
+  /**
+   * Perform 1 lap, where the track is a combination of all the waypoints.
+   * Drives from the first waypoint in the list to the last waypoint in the list.
+   * This method calls an overpass handling method for driving over the overpass
+   * and also accounts for obstacle avoidance. Note that this method
+   * @param waypoints : A list of all the waypoints the robot must travel to, usually passed from an XML file.
+   */
   public static void doLap(List<Point> waypoints) {    
     driveToFirstWayPoint(waypoints.get(0));
-    LightLocalizer.localize_waypoint();
-    
-    //println("Driving to "+waypoints.get(i+1));
-    
+    LightLocalizer.localize_waypoint();    
     boolean overpassExists = false;
     for(int i = 0; i < waypoints.size()-1; i++) { // i is the current waypoint index.
       try {
@@ -54,6 +58,14 @@ public class Navigation {
     }
   }
   
+  /**
+   * Drive over an overpass from overpass point A to overpass point B or vice-versa,
+   * depending on which overpass point is closer to the waypoint which the robot is 
+   * currently at. This method accounts for the slip between the wheel and the surface
+   * of the playground and wooden overpass and sets the odometer to the endpoint of the
+   * overpass after the robot has passed over the overpass and arrived at the last endpoint.
+   * 
+   */
   public static void driveOverpass() {
     double distA = distanceBetween(getCurrentPoint_feet(), overpass.endpointA);
     double distB = distanceBetween(getCurrentPoint_feet(), overpass.endpointB);
@@ -78,12 +90,19 @@ public class Navigation {
     odometer.setY(toMeters(overpassEnd.y));
     
     /* step 4: drive slightly forwards, since the robot always arrives slightly short */
-    Movement.moveStraightFor(0.25);
-    
-    odometer.printPositionInTileLengths();
+    Movement.moveStraightFor(0.25);    
     
   }
   
+  /**
+   * Checks if there is an overpass between the current waypoint and destination
+   * waypoint based on the slope between the current waypoint and destination
+   * waypoint, and the slope between the endpoints of the overpass.
+   * 
+   * @param cur The current waypoint which the robot is at.
+   * @param dest The destination waypoint which the robot must travel to.
+   * @return boolean indicator for if there's a slope between current and destination point.
+   */
   public static boolean checkForOverpass(Point cur, Point dest) {
     double[] overpassSlope = getOverPassSlope();
     double[] waypointSlope = getCurDestSlope(cur,dest);
@@ -92,6 +111,12 @@ public class Navigation {
     return (m_equal && b_equal);
   }
   
+  /**
+   * The slope y=mx+b formed by the endpoints of the overpass, since the overpass
+   * forms a straight line which can be depicted as a slope with relation
+   * to the playing field.
+   * @return Parameters m (mb[0]) and b (mb[1]) in the slope y=mx+b in an array of length 2.
+   */
   public static double[] getOverPassSlope() {
     Point p1 = overpass.endpointA;
     Point p2 = overpass.endpointB;
@@ -101,6 +126,11 @@ public class Navigation {
     return mb;
   }
   
+  /**
+   * The slope y=mx+b formed by the current waypoint the robot is at, and the destination
+   * waypoint which the robot must travel to.
+   * @return Parameters m (mb[0]) and b (mb[1]) in the slope y=mx+b in an array of length 2.
+   */
   public static double[] getCurDestSlope(Point cur, Point dest) {
     double m = (dest.y - cur.y) / (dest.x - cur.x);
     double b = dest.y - m*dest.x;
@@ -551,11 +581,8 @@ public class Navigation {
       LightLocalizer.localize_waypoint();
       odometer.setX(toMeters(destination.x));
       odometer.setY(toMeters(destination.y));
-//      odometer.setTheta(getDestinationAngle(startPoint, destination));
+      //odometer.setTheta(getDestinationAngle(startPoint, destination));
     }
-//    odometer.setX(toMeters(destination.x));
-//    odometer.setY(toMeters(destination.y));
-//    odometer.setTheta(getDestinationAngle(startPoint, destination));
     Movement.pause(1);
   }
 
@@ -593,7 +620,6 @@ public class Navigation {
       }
     }
     Point c = getCurrentPoint_feet();
-
     if (distanceBetween(c, destination) < 0.5) {
       directTravelTo(destination);
     } else {
