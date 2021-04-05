@@ -13,8 +13,8 @@ public class Navigation {
 
   /** the error margin when comparing two numbers to see if they are the same. */
   private static double smallTolerance = 0.2;
-  /** a counter to make sure two points are the same. */
-  public static int counter = 0;
+  /** a larger error margin when comparing two numbers to see if they are the same.**/
+  private static double bigTolerance = 1.1;
   /** horizontal offset of robots' position for tunnel. */
   public static double horizontalOffset = (BASE_WIDTH / 2);
   /** vertical offset of robots' position for tunnel. */
@@ -32,6 +32,65 @@ public class Navigation {
   /** Do not instantiate this class. */
   private Navigation() {}
 
+  public static void doLap(List<Point> waypoints) {    
+    driveToFirstWayPoint(waypoints.get(0));
+    LightLocalizer.localize_waypoint();
+    
+    for(int i=1; i<waypoints.size(); i++) {
+      travelTo(waypoints.get(i));
+      
+      // now waypoints.get(i) is current position, i+1 is the destination.
+      boolean overpassExists = checkForOverpass(waypoints.get(i), waypoints.get(i+1));
+      if(overpassExists) {
+        driveOverpass();
+      }
+      
+      
+      //if(i<waypoints.size()-1) {}
+      
+      
+      
+    }
+  }
+  
+  public static void driveOverpass() {
+    double destTheta = getDestinationAngle(getCurrentPoint_feet(), overpass.endpointA);
+    turnTo(destTheta);
+    directTravelTo(overpass.endpointA);
+    println("Arrived at endpoint A");
+    Movement.pause(3);
+    
+    destTheta = getDestinationAngle(overpass.endpointA, overpass.endpointB);
+    turnTo(destTheta);
+    directTravelTo(overpass.endpointB);
+    Movement.pause(10);
+    println("sodijdosfijsdofjisdoifjsdofijsdofijdsf");
+  }
+  
+  public static boolean checkForOverpass(Point cur, Point dest) {
+    double[] overpassSlope = getOverPassSlope();
+    double[] waypointSlope = getCurDestSlope(cur,dest);
+    boolean m_equal = roughlySame(overpassSlope[0], waypointSlope[0], bigTolerance);
+    boolean b_equal = roughlySame(overpassSlope[1], waypointSlope[1], bigTolerance);
+    return (m_equal && b_equal);
+  }
+  
+  public static double[] getOverPassSlope() {
+    Point p1 = overpass.endpointA;
+    Point p2 = overpass.endpointB;
+    double m = (p2.y - p1.y) / (p2.x - p1.x);
+    double b = p1.y - m*p1.x;
+    double[] mb = {m,b};
+    return mb;
+  }
+  
+  public static double[] getCurDestSlope(Point cur, Point dest) {
+    double m = (dest.y - cur.y) / (dest.x - cur.x);
+    double b = dest.y - m*dest.x;
+    double[] mb = {m,b};
+    return mb;
+  }
+  
 
   /**
    * Using the starting corner to cross the tunnel using a helper method and set the odometer.
@@ -426,15 +485,7 @@ public class Navigation {
     crossingTunnel(corner);
   }
   
-  public static void doLap(List<Point> waypoints) {
-    for(int i=0; i<waypoints.size(); i++) {
-      println("\nWaypoint "+i);
-      odometer.printPositionInTileLengths();
-      println("Travelling to waypoint"+waypoints.get(i));
-      travelTo(waypoints.get(i));
-      println("Currently at waypoint "+waypoints.get(i)+"\n");
-    }
-  }
+
   
 
   /**
@@ -449,7 +500,6 @@ public class Navigation {
     Movement.moveStraightFor(travelDist);
   }
   
-//  public static void 
 
 
   /**
@@ -485,15 +535,13 @@ public class Navigation {
       travelToObstacle(destination);
     }
 
-    double tolerance = 1.0; // 1 tile
+    double tolerance = 0.5;
     if ((roughlySame(startPoint.x, destination.x, tolerance)
         || roughlySame(startPoint.y, destination.y, tolerance))
-        && counter < 4
         ) {
-      counter++;
       LightLocalizer.localize_waypoint();
-//      odometer.setX(toMeters(destination.x));
-//      odometer.setY(toMeters(destination.y));
+      odometer.setX(toMeters(destination.x));
+      odometer.setY(toMeters(destination.y));
 //      odometer.setTheta(getDestinationAngle(startPoint, destination));
     }
 //    odometer.setX(toMeters(destination.x));
@@ -677,5 +725,8 @@ public class Navigation {
     // Using convertDistance method to calculate constant rotation of the robot + scaling
     return convertDistance((Math.PI * BASE_WIDTH * angle / 360.0) * 100) / 100;
   }
+
+
+
 
 }

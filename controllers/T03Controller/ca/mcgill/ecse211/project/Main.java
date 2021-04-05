@@ -5,6 +5,7 @@ import static ca.mcgill.ecse211.project.Resources.*;
 
 import ca.mcgill.ecse211.playingfield.Point;
 import java.lang.Thread;
+import java.util.Arrays;
 import simlejos.ExecutionController;
 
 /**
@@ -24,7 +25,9 @@ public class Main {
     // Start the odometer thread and update the number of threads
     new Thread(odometer).start();
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
-        
+
+
+    
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
     
