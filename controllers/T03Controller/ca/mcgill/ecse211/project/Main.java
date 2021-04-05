@@ -40,13 +40,12 @@ public class Main {
   }
   
  
-  
-  public static void getToIsland(Point startingPoint) {
-    beep(3);
-    Navigation.crossingTunnel(corner);
-    println("===========================\nMoving to: " + waypoint(0));
-  }
-
+  /**
+   * The logic used to perform the beta demo.
+   * Goes to the first waypoint on the island based on the starting point,
+   * then returns to the starting point. Does not accound for obstacles.
+   * @param startingPoint The starting corner of the robot.
+   */
   public static void betaDemo(Point startingPoint) {
     beep(3);
     Navigation.crossingTunnel(corner);
@@ -54,9 +53,6 @@ public class Main {
     Navigation.driveToFirstWayPoint(waypoint(0));
     println("Reached the first waypoint");
     beep(3);
-    for (int i = 1; i < 20; i++) {
-      Navigation.travelTo(waypoint(i));
-    }
     Navigation.travelTo(waypoint(0));
     Navigation.moveBackToStart(startingPoint, waypoint(0));
   }

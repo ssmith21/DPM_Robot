@@ -503,6 +503,10 @@ public class Navigation {
     }
   }
 
+  /**
+   * Get to the main island by crossing the bridge depending on the starting corner of the robot.
+   * @param corner The starting corner of the robot.
+   */
   public static void getToIsland(int corner) {
     Point startingPoint = new Point(-1,-1);
     switch (corner) {
