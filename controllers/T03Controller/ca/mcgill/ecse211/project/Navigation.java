@@ -43,8 +43,9 @@ public class Navigation {
       boolean overpassExists = checkForOverpass(waypoints.get(i), waypoints.get(i+1));
       if(overpassExists) {
         driveOverpass();
+        travelTo(waypoints.get(i+1));
+        i++;
       }
-      
       
       //if(i<waypoints.size()-1) {}
       
@@ -54,6 +55,16 @@ public class Navigation {
   }
   
   public static void driveOverpass() {
+    double distA = distanceBetween(getCurrentPoint_feet(), overpass.endpointA);
+    double distB = distanceBetween(getCurrentPoint_feet(), overpass.endpointB);
+    int closer = (distA < distB) ? 0 : 1;
+    
+    if(closer==0) {
+      println("Drive to overpass endpoint A : "+overpass.endpointA);
+    }else {
+      println("Drive to overpass endpoint B : "+overpass.endpointB);
+    }
+    
     double destTheta = getDestinationAngle(getCurrentPoint_feet(), overpass.endpointA);
     turnTo(destTheta);
     directTravelTo(overpass.endpointA);
