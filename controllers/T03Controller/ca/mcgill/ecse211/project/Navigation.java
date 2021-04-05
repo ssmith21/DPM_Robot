@@ -37,23 +37,23 @@ public class Navigation {
    * Drives from the first waypoint in the list to the last waypoint in the list.
    * This method calls an overpass handling method for driving over the overpass
    * and also accounts for obstacle avoidance. Note that this method
-   * @param waypoints : A list of all the waypoints the robot must travel to, usually passed from an XML file.
+   * @param waypoints : A list of all the waypoints the robot must travel to
    */
   public static void doLap(List<Point> waypoints) {    
     driveToFirstWayPoint(waypoints.get(0));
     LightLocalizer.localize_waypoint();    
     boolean overpassExists = false;
-    for(int i = 0; i < waypoints.size()-1; i++) { // i is the current waypoint index.
+    for (int i = 0; i < waypoints.size() - 1; i++) { // i is the current waypoint index.
       try {
-        overpassExists = checkForOverpass(waypoints.get(i),waypoints.get(i+1));
-      } catch(ArrayIndexOutOfBoundsException e) {}
-      if(overpassExists) {
-        println("Driving over overpass then travelling to "+waypoints.get(i+1));
+        overpassExists = checkForOverpass(waypoints.get(i), waypoints.get(i + 1));
+      } catch (ArrayIndexOutOfBoundsException e) {}
+      if (overpassExists) {
+        println("Driving over overpass then travelling to " + waypoints.get(i + 1));
         driveOverpass();
-        travelTo(waypoints.get(i+1));
+        travelTo(waypoints.get(i + 1));
       } else {
-        println("Travelling to "+waypoints.get(i+1));
-        travelTo(waypoints.get(i+1));
+        println("Travelling to " + waypoints.get(i + 1));
+        travelTo(waypoints.get(i + 1));
       } 
     }
   }
@@ -105,10 +105,10 @@ public class Navigation {
    */
   public static boolean checkForOverpass(Point cur, Point dest) {
     double[] overpassSlope = getOverPassSlope();
-    double[] waypointSlope = getCurDestSlope(cur,dest);
-    boolean m_equal = roughlySame(overpassSlope[0], waypointSlope[0], bigTolerance);
-    boolean b_equal = roughlySame(overpassSlope[1], waypointSlope[1], bigTolerance);
-    return (m_equal && b_equal);
+    double[] waypointSlope = getCurDestSlope(cur, dest);
+    boolean mequal = roughlySame(overpassSlope[0], waypointSlope[0], bigTolerance);
+    boolean bequal = roughlySame(overpassSlope[1], waypointSlope[1], bigTolerance);
+    return (mequal && bequal);
   }
   
   /**
@@ -121,20 +121,22 @@ public class Navigation {
     Point p1 = overpass.endpointA;
     Point p2 = overpass.endpointB;
     double m = (p2.y - p1.y) / (p2.x - p1.x);
-    double b = p1.y - m*p1.x;
-    double[] mb = {m,b};
+    double b = p1.y - m * p1.x;
+    double[] mb = {m, b};
     return mb;
   }
   
   /**
    * The slope y=mx+b formed by the current waypoint the robot is at, and the destination
    * waypoint which the robot must travel to.
-   * @return Parameters m (mb[0]) and b (mb[1]) in the slope y=mx+b in an array of length 2.
+   * @param cur The current point
+   * @param dest The destination point
+   * @return mb Parameters m (mb[0]) and b (mb[1]) in the slope y=mx+b in an array of length 2.
    */
   public static double[] getCurDestSlope(Point cur, Point dest) {
     double m = (dest.y - cur.y) / (dest.x - cur.x);
-    double b = dest.y - m*dest.x;
-    double[] mb = {m,b};
+    double b = dest.y - m * dest.x;
+    double[] mb = {m, b};
     return mb;
   }
   
@@ -321,7 +323,8 @@ public class Navigation {
       println("Done Step 5");
       
     }
-    Movement.moveStraightFor(-TILE_SIZE / 5); // ensure we're behind black line for light localization
+    // ensure we're behind black line for light localization
+    Movement.moveStraightFor(-TILE_SIZE / 5);
 
   }
 
@@ -329,6 +332,7 @@ public class Navigation {
    * Traveling back from the waypoint to the starting point.
    * The robot crosses the tunnel and goes back to the starting point.
    * @param start The starting point of the robot.
+   * @param wayPoint The first waypoint
    */
   public static void moveBackToStart(Point start, Point wayPoint) {
     if (verticalTunnel) {
@@ -504,7 +508,7 @@ public class Navigation {
   }
 
   public static void getToIsland(int corner) {
-    Point startingPoint = new Point(-1,-1);
+    Point startingPoint = new Point(-1, -1);
     switch (corner) {
       case(0):
         startingPoint = new Point(0.5, 0.5);
