@@ -43,10 +43,11 @@ public class Navigation {
       boolean overpassExists = checkForOverpass(waypoints.get(i), waypoints.get(i+1));
       try {
         if(overpassExists) {
-          Movement.setMotorSpeeds(100);
+          Movement.setMotorSpeeds(50);
           driveOverpass();
           travelTo(waypoints.get(i+1));
           i++;
+          Movement.setMotorSpeeds(FORWARD_SPEED);
         }
       }catch(Exception e) {
         // do nothing
@@ -66,15 +67,23 @@ public class Navigation {
     Point overpassStart = (distA < distB) ? (overpass.endpointA) : (overpass.endpointB);
     Point overpassEnd = (distA < distB) ? (overpass.endpointB) : (overpass.endpointA);
     
+    /* Step 1: arrive at first overpass endpoint */
     double destTheta = getDestinationAngle(getCurrentPoint_feet(), overpassStart);
     turnTo(destTheta);
     directTravelTo(overpassStart);
     
-    Movement.pause(3); //TODO: Remove this
+    /* Step 2: drive up the overpass slightly */
+    destTheta = getDestinationAngle(getCurrentPoint_feet(), overpassEnd);
+    turnTo(destTheta);
+    Movement.moveStraightFor(0.2);
     
+    /* Step 3: drive over the overpass carefully */
+//    Movement.setMotorSpeeds(10);
     destTheta = getDestinationAngle(overpassStart, overpassEnd);
     turnTo(destTheta);
     directTravelTo(overpassEnd);
+//    Movement.setMotorSpeeds(FORWARD_SPEED);
+
   }
   
   public static boolean checkForOverpass(Point cur, Point dest) {
@@ -292,8 +301,10 @@ public class Navigation {
       LightLocalizer.alignWithLine();
       println("Done Step 6. Odometer : ");
       odometer.printPosition();
-
+      
     }
+    Movement.moveStraightFor(-TILE_SIZE / 5);
+
   }
 
   /**

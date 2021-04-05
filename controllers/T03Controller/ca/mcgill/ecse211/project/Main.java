@@ -34,7 +34,6 @@ public class Main {
     Navigation.getToIsland(corner);
     println("Got to island");
     odometer.printPositionInTileLengths();
-    Movement.pause(5);
     Navigation.doLap(waypoints);
     
     System.exit(0);

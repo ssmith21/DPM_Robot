@@ -105,6 +105,7 @@ public class LightLocalizer {
    * Modified the position of the robot
    */
   private static void stepOne_waypoint() {
+    moveStraightFor(-movementOffset);
     double backwardAdjustment = -movementOffset * 3.5;
     alignWithLine();
     moveStraightFor(backwardAdjustment);
