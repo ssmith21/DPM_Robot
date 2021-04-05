@@ -74,8 +74,8 @@ public class Navigation {
     destTheta = getDestinationAngle(overpassStart, overpassEnd);
     turnTo(destTheta);
     directTravelTo(overpassEnd);
-    odometer.setX(toFeet(overpassEnd.x));
-    odometer.setY(toFeet(overpassEnd.y));
+    odometer.setX(toMeters(overpassEnd.x));
+    odometer.setY(toMeters(overpassEnd.y));
     
     /* step 4: drive slightly forwards, since the robot always arrives slightly short */
     Movement.moveStraightFor(0.25);
