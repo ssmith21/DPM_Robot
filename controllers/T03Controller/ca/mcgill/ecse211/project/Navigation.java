@@ -36,17 +36,21 @@ public class Navigation {
    * Perform 1 lap, where the track is a combination of all the waypoints.
    * Drives from the first waypoint in the list to the last waypoint in the list.
    * This method calls an overpass handling method for driving over the overpass
-   * and also accounts for obstacle avoidance. Note that this method
+   * and also accounts for obstacle avoidance.
+   * Then it goes back to the first waypoint and moves back to the starting point.
    * @param waypoints : A list of all the waypoints the robot must travel to
    */
   public static void doLap(List<Point> waypoints) {    
     driveToFirstWayPoint(waypoints.get(0));
-    LightLocalizer.localize_waypoint();    
+    LightLocalizer.localize_waypoint();
+    Movement.beep(3);
     boolean overpassExists = false;
     for (int i = 0; i < waypoints.size() - 1; i++) { // i is the current waypoint index.
       try {
         overpassExists = checkForOverpass(waypoints.get(i), waypoints.get(i + 1));
-      } catch (ArrayIndexOutOfBoundsException e) {}
+      } catch (ArrayIndexOutOfBoundsException e) {
+        errPrintln("Out of Bound Array in getting the waypoints");
+      }
       if (overpassExists) {
         println("Driving over overpass then travelling to " + waypoints.get(i + 1));
         driveOverpass();
@@ -56,6 +60,8 @@ public class Navigation {
         travelTo(waypoints.get(i + 1));
       } 
     }
+    travelTo(waypoints.get(0));
+    moveBackToStart(getStartingPoint(corner), waypoints.get(0));
   }
   
   /**
@@ -75,7 +81,7 @@ public class Navigation {
     /* Step 1: arrive at first overpass endpoint */
     double destTheta = getDestinationAngle(getCurrentPoint_feet(), overpassStart);
     turnTo(destTheta);
-    directTravelTo(overpassStart);
+    slowDirectTravelTo(overpassStart);
     
     /* Step 2: drive up the overpass slightly */
     destTheta = getDestinationAngle(getCurrentPoint_feet(), overpassEnd);
@@ -85,7 +91,7 @@ public class Navigation {
     /* Step 3: drive over the overpass carefully */
     destTheta = getDestinationAngle(overpassStart, overpassEnd);
     turnTo(destTheta);
-    directTravelTo(overpassEnd);
+    slowDirectTravelTo(overpassEnd);
     odometer.setX(toMeters(overpassEnd.x));
     odometer.setY(toMeters(overpassEnd.y));
     
@@ -103,7 +109,7 @@ public class Navigation {
    * @param dest The destination waypoint which the robot must travel to.
    * @return boolean indicator for if there's a slope between current and destination point.
    */
-  public static boolean checkForOverpass(Point cur, Point dest) {
+  private static boolean checkForOverpass(Point cur, Point dest) {
     double[] overpassSlope = getOverPassSlope();
     double[] waypointSlope = getCurDestSlope(cur, dest);
     boolean mequal = roughlySame(overpassSlope[0], waypointSlope[0], bigTolerance);
@@ -117,7 +123,7 @@ public class Navigation {
    * to the playing field.
    * @return Parameters m (mb[0]) and b (mb[1]) in the slope y=mx+b in an array of length 2.
    */
-  public static double[] getOverPassSlope() {
+  private static double[] getOverPassSlope() {
     Point p1 = overpass.endpointA;
     Point p2 = overpass.endpointB;
     double m = (p2.y - p1.y) / (p2.x - p1.x);
@@ -133,7 +139,7 @@ public class Navigation {
    * @param dest The destination point
    * @return mb Parameters m (mb[0]) and b (mb[1]) in the slope y=mx+b in an array of length 2.
    */
-  public static double[] getCurDestSlope(Point cur, Point dest) {
+  private static double[] getCurDestSlope(Point cur, Point dest) {
     double m = (dest.y - cur.y) / (dest.x - cur.x);
     double b = dest.y - m * dest.x;
     double[] mb = {m, b};
@@ -204,16 +210,13 @@ public class Navigation {
         errPrintln("Error getting starting corner");
     }
   }
-  //Problems:
-  //World9(Horizontal tunnel Bottom right corner): Top Tunnel
-  //World8(Horizontal tunnel Bottom left corner): Top Tunnel
 
   /**
    * Helps the robot to travel through the tunnel depending on what corner the robot is placed at.
    * The movement depends on the corner and orientation of the tunnel.
    * 
    */
-  public static void moveToTunnel(int startingCorner) {
+  private static void moveToTunnel(int startingCorner) {
     if (verticalTunnel) {
       /* step 0 : preliminary calculations */
       Point cur = getCurrentPoint_feet();
@@ -506,12 +509,13 @@ public class Navigation {
       LightLocalizer.alignWithLine();
     }
   }
-
+  
   /**
-   * Get to the main island by crossing the bridge depending on the starting corner of the robot.
+   * Get the starting point of the robot.
    * @param corner The starting corner of the robot.
+   * @return startingPoint The starting point of the robot.
    */
-  public static void getToIsland(int corner) {
+  public static Point getStartingPoint(int corner) {
     Point startingPoint = new Point(-1, -1);
     switch (corner) {
       case(0):
@@ -529,25 +533,20 @@ public class Navigation {
       default:
         errPrintln("Error getting starting corner");
     }
-    crossingTunnel(corner);
+    return startingPoint;
   }
-  
-
-  
 
   /**
    * Travel to the first point after passing the tunnel.
    * @param destination The first waypoint
    */
-  public static void driveToFirstWayPoint(Point destination) {
+  private static void driveToFirstWayPoint(Point destination) {
     Point startPoint = getCurrentPoint_feet();
     double travelDist = toMeters(distanceBetween(startPoint, destination));
     double destTheta = getDestinationAngle(startPoint, destination);
     turnTo(destTheta);
     Movement.moveStraightFor(travelDist);
   }
-  
-
 
   /**
    * Travels to specific destination depending on whether
@@ -603,6 +602,16 @@ public class Navigation {
     double travelDist = distanceBetween(curPoint, destination);
     Movement.moveStraightFor(toMeters(travelDist));
   }
+  
+  /**
+   * Takes a point and moves directly and slowly toward it without concerning about the obstacles.
+   * @param destination
+   */
+  public static void slowDirectTravelTo(Point destination) {
+    Point curPoint = getCurrentPoint_feet();
+    double travelDist = distanceBetween(curPoint, destination);
+    Movement.moveStraightSlowFor(toMeters(travelDist));
+  }
 
   /**
    * Moves forward and when it detects an obstacle calls avoid method from AvoidObstalce Class.
@@ -611,7 +620,7 @@ public class Navigation {
    */
   public static void travelToObstacle(Point destination) {
     int noiseTolerance = 2;
-    Movement.setMotorSpeeds(200);
+    Movement.setMotorSpeeds(300);
     while (true) {
       Movement.drive();
       Point cur = getCurrentPoint_feet();
