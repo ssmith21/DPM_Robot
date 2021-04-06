@@ -51,6 +51,20 @@ public class Movement {
   } 
   
   /**
+   * Moves the robot straight for the given distance.
+   *
+   * @param distance in feet (tile sizes), may be negative
+   */
+  public static void moveStraightSlowFor(double distance) {
+    //Set motor speeds and rotate them by the given distance.
+    // This method will not return until the robot has finished moving.
+    leftMotor.setSpeed(FORWARD_SPEED / 2);
+    rightMotor.setSpeed(FORWARD_SPEED / 2);
+    leftMotor.rotate(convertDistance(distance), true);
+    rightMotor.rotate(convertDistance(distance), false);
+  } 
+  
+  /**
    * Turns the robot by a specified angle. Note that this method is different from
    * {@code Navigation.turnTo()}. For example, if the robot is facing 90 degrees, calling
    * {@code turnBy(90)} will make the robot turn to 180 degrees, but calling
