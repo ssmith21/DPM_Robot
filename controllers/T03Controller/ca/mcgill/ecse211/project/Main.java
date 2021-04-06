@@ -1,9 +1,7 @@
 package ca.mcgill.ecse211.project;
 
-import static ca.mcgill.ecse211.project.Movement.*;
 import static ca.mcgill.ecse211.project.Resources.*;
 
-import ca.mcgill.ecse211.playingfield.Point;
 import java.lang.Thread;
 import simlejos.ExecutionController;
 
@@ -24,38 +22,18 @@ public class Main {
     // Start the odometer thread and update the number of threads
     new Thread(odometer).start();
     ExecutionController.setNumberOfParties(NUMBER_OF_THREADS);
-
-
     
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
-    
-    Navigation.getToIsland(corner);
+    Movement.beep(3);
+    Navigation.crossingTunnel(corner);
     println("Got to island");
     odometer.printPositionInTileLengths();
     Navigation.doLap(waypoints);
-    
+    Movement.beep(5);
     System.exit(0);
   }
-  
- 
-  /**
-   * The logic used to perform the beta demo.
-   * Goes to the first waypoint on the island based on the starting point,
-   * then returns to the starting point. Does not accound for obstacles.
-   * @param startingPoint The starting corner of the robot.
-   */
-  public static void betaDemo(Point startingPoint) {
-    beep(3);
-    Navigation.crossingTunnel(corner);
-    println("Moving to: " + waypoint(0));
-    Navigation.driveToFirstWayPoint(waypoint(0));
-    println("Reached the first waypoint");
-    beep(3);
-    Navigation.travelTo(waypoint(0));
-    Navigation.moveBackToStart(startingPoint, waypoint(0));
-  }
-  
+
   /**
    * Example using WifiConnection to communicate with a server and receive data concerning the
    * competition such as the starting corner the robot is placed in.<br>
