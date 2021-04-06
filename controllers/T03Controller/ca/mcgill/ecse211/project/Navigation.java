@@ -15,17 +15,17 @@ public class Navigation {
   private static double smallTolerance = 0.2;
   /** a larger error margin when comparing two numbers to see if they are the same.**/
   private static double bigTolerance = 1.1;
-  /** horizontal offset of robots' position for tunnel. */
+  /** horizontal offset of robots' position for crossing the tunnel. */
   public static double horizontalOffset = (BASE_WIDTH / 2);
-  /** vertical offset of robots' position for tunnel. */
+  /** vertical offset of robots' position for crossing the tunnel. */
   public static double verticalOffset = (BASE_WIDTH / 2.5);
-  /** horizontal tunnel orientation while crossing the tunnel at the beginning. */
+  /** orientation of the robot for horizontal tunnel to cross the tunnel at the beginning. */
   public static int horizontalOrientation = (corner == 0 || corner == 3) ? 90 : 270;
-  /** vertical tunnel orientation while crossing the tunnel at the beginning. */
+  /** orientation of the robot for vertical tunnel to cross the tunnel at the beginning. */
   public static int verticalOrientation = (corner == 2 || corner == 3) ? 180 : 0;
-  /** horizontal tunnel orientation while crossing the tunnel at the end. */
+  /** orientation of the robot for horizontal tunnel to cross the tunnel at the end. */
   public static int fHorizontalOrientation = (corner == 0 || corner == 3) ? 270 : 90;
-  /** vertical tunnel orientation while crossing the tunnel at the end. */
+  /** orientation of the robot for vertical tunnel to cross the tunnel at the end. */
   public static int fVerticalOrientation = (corner == 2 || corner == 3) ? 0 : 180;
 
 
