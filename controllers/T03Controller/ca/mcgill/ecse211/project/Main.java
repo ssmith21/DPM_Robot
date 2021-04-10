@@ -3,6 +3,7 @@ package ca.mcgill.ecse211.project;
 import static ca.mcgill.ecse211.project.Resources.*;
 
 import java.lang.Thread;
+import ca.mcgill.ecse211.playingfield.Point;
 import simlejos.ExecutionController;
 
 /**
@@ -25,7 +26,6 @@ public class Main {
     
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
-<<<<<<< HEAD
     Point startingPoint = Navigation.getStartingPoint(corner);
     
     Navigation.getToIsland(corner);
@@ -34,14 +34,7 @@ public class Main {
     Navigation.doLap(waypoints);
     Navigation.moveBackToStart(startingPoint, waypoint(0));
     
-=======
-    Movement.beep(3);
-    Navigation.crossingTunnel(corner);
-    println("Got to island");
-    odometer.printPositionInTileLengths();
-    Navigation.doLap(waypoints);
-    Movement.beep(5);
->>>>>>> 61ae6fbe92b4666f646efe3b4ed1be44d731c48f
+
     System.exit(0);
   }
 

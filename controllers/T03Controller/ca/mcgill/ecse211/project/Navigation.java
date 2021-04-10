@@ -56,15 +56,9 @@ public class Navigation {
         driveOverpass();
         travelTo(waypoints.get(i + 1));
       } else {
-<<<<<<< HEAD
-        println("Travelling to "+waypoints.get(i+1));
-        travelTo(waypoints.get(i+1));
-      }
-=======
         println("Travelling to " + waypoints.get(i + 1));
         travelTo(waypoints.get(i + 1));
       } 
->>>>>>> 61ae6fbe92b4666f646efe3b4ed1be44d731c48f
     }
     travelTo(waypoints.get(0));
     moveBackToStart(getStartingPoint(corner), waypoints.get(0));
@@ -526,7 +520,7 @@ public class Navigation {
    * @param corner The starting corner of the robot.
    * @return startingPoint The starting point of the robot.
    */
-<<<<<<< HEAD
+
   public static void getToIsland(int corner) {
     Point startingPoint = getStartingPoint(corner);
     crossingTunnel(corner);
@@ -539,12 +533,9 @@ public class Navigation {
    * @param corner wifi parameter indicating the robots' starting corner.
    * @return
    */
-  public static Point getStartingPoint(int corner) {
-    Point startingPoint = new Point(-1,-1);
-=======
+
   public static Point getStartingPoint(int corner) {
     Point startingPoint = new Point(-1, -1);
->>>>>>> 61ae6fbe92b4666f646efe3b4ed1be44d731c48f
     switch (corner) {
       case(0):
         startingPoint = new Point(0.5, 0.5);
@@ -563,12 +554,7 @@ public class Navigation {
     }
     return startingPoint;
   }
-<<<<<<< HEAD
-  
-  
-  
-=======
->>>>>>> 61ae6fbe92b4666f646efe3b4ed1be44d731c48f
+
 
   /**
    * Travel to the first point after passing the tunnel.
