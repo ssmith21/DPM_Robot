@@ -54,7 +54,7 @@ public class Navigation {
       } else {
         println("Travelling to "+waypoints.get(i+1));
         travelTo(waypoints.get(i+1));
-      } 
+      }
     }
   }
   
@@ -66,7 +66,7 @@ public class Navigation {
    * overpass after the robot has passed over the overpass and arrived at the last endpoint.
    * 
    */
-  public static void driveOverpass() {
+  private static void driveOverpass() {
     double distA = distanceBetween(getCurrentPoint_feet(), overpass.endpointA);
     double distB = distanceBetween(getCurrentPoint_feet(), overpass.endpointB);
     Point overpassStart = (distA < distB) ? (overpass.endpointA) : (overpass.endpointB);
@@ -103,7 +103,7 @@ public class Navigation {
    * @param dest The destination waypoint which the robot must travel to.
    * @return boolean indicator for if there's a slope between current and destination point.
    */
-  public static boolean checkForOverpass(Point cur, Point dest) {
+  private static boolean checkForOverpass(Point cur, Point dest) {
     double[] overpassSlope = getOverPassSlope();
     double[] waypointSlope = getCurDestSlope(cur,dest);
     boolean m_equal = roughlySame(overpassSlope[0], waypointSlope[0], bigTolerance);
@@ -117,7 +117,7 @@ public class Navigation {
    * to the playing field.
    * @return Parameters m (mb[0]) and b (mb[1]) in the slope y=mx+b in an array of length 2.
    */
-  public static double[] getOverPassSlope() {
+  private static double[] getOverPassSlope() {
     Point p1 = overpass.endpointA;
     Point p2 = overpass.endpointB;
     double m = (p2.y - p1.y) / (p2.x - p1.x);
@@ -131,7 +131,7 @@ public class Navigation {
    * waypoint which the robot must travel to.
    * @return Parameters m (mb[0]) and b (mb[1]) in the slope y=mx+b in an array of length 2.
    */
-  public static double[] getCurDestSlope(Point cur, Point dest) {
+  private static double[] getCurDestSlope(Point cur, Point dest) {
     double m = (dest.y - cur.y) / (dest.x - cur.x);
     double b = dest.y - m*dest.x;
     double[] mb = {m,b};
@@ -211,7 +211,7 @@ public class Navigation {
    * The movement depends on the corner and orientation of the tunnel.
    * 
    */
-  public static void moveToTunnel(int startingCorner) {
+  private static void moveToTunnel(int startingCorner) {
     if (verticalTunnel) {
       /* step 0 : preliminary calculations */
       Point cur = getCurrentPoint_feet();
@@ -331,6 +331,8 @@ public class Navigation {
    * @param start The starting point of the robot.
    */
   public static void moveBackToStart(Point start, Point wayPoint) {
+    travelTo(wayPoint); // drive to waypoint(0)
+    
     if (verticalTunnel) {
       /* step 0: localize at waypoint */
       turnTo(0);
@@ -605,7 +607,7 @@ public class Navigation {
    * When it passes the obstacle or it is close to destination calls directTravelTo.
    * @param destination
    */
-  public static void travelToObstacle(Point destination) {
+  private static void travelToObstacle(Point destination) {
     int noiseTolerance = 2;
     Movement.setMotorSpeeds(200);
     while (true) {

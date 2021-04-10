@@ -30,11 +30,13 @@ public class Main {
     
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
+    Point startingPoint = Navigation.getCurrentPoint_feet();
     
     Navigation.getToIsland(corner);
     println("Got to island");
     odometer.printPositionInTileLengths();
     Navigation.doLap(waypoints);
+    Navigation.moveBackToStart(startingPoint, waypoint(0));
     
     System.exit(0);
   }
