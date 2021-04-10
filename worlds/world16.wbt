@@ -36,8 +36,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.9987188881348198 0.0027185587083260387 0.0505291195381322 6.175547676943341
-  position 2.329831055047923 0.9404273337900465 7.673173988436423
+  orientation -0.9998643879149056 -0.002277655790040992 -0.016310060197724942 6.005648151014526
+  position 2.5392730177355953 -0.7623776822556688 7.514837403952831
 }
 TexturedBackground {
 }
@@ -46,21 +46,16 @@ TexturedBackgroundLight {
 DEF ARENA DPM-CompetitionArena {
   children [
     DPM-Obstacle {
-      position 3.3 0.88
-    }
-    DPM-Overpass {
-      position 7 3
-      rotation 0 0 1 -0.4636476090008061
-      ramplength 1.7360679774997898
+      position 0.31 0.93
     }
     DEF OBSTACLE2 DPM-Obstacle {
       name "obstacle2"
-      position 2.9 1.3716
+      position 2.14 1.3716
       sections 4
     }
     DEF OBSTACLE3 DPM-Obstacle {
       name "obstacle3"
-      position 1.9 0.35
+      position 1.23 0.59
       rotation 3.14
       sections 9
     }
