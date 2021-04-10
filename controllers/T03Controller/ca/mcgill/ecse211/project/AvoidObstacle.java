@@ -34,6 +34,8 @@ public class AvoidObstacle {
   private static boolean turningRight = false;
   /** Total rotation of US motor. */
   private static int totalMotorRotation = 0;
+  /** Correction count to prevent the robot from continuously reversing after detecting an obstacle*/
+  private static int correctionCount = 0;
   
   /** This is the default constructor of this class. It cannot be accessed externally. */
   private AvoidObstacle() {}
@@ -237,7 +239,7 @@ public class AvoidObstacle {
     
     // value determined by trial and error.
     double initialMove = 0.06475;
-    if (distance > 10 && notReturningFlag) {
+    if (distance > 8 && notReturningFlag) {
             
       int motorRotate = 45; 
       int robotRotate = -70; 
@@ -256,6 +258,13 @@ public class AvoidObstacle {
       turnUsMotor(motorRotate);
       
       notReturningFlag = false;
+    } else {
+      
+      // in this case, if the robot is too close to the obstacle, reverse it a little bit.
+      if(correctionCount==0) {
+        Movement.moveStraightFor(-initialMove * 0.5);
+        correctionCount++;
+      }
     }
   }
   

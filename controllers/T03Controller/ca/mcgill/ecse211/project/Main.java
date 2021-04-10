@@ -30,7 +30,7 @@ public class Main {
     
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
-    Point startingPoint = Navigation.getCurrentPoint_feet();
+    Point startingPoint = Navigation.getStartingPoint(corner);
     
     Navigation.getToIsland(corner);
     println("Got to island");

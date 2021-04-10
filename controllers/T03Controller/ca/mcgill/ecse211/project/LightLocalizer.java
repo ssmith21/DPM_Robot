@@ -110,6 +110,7 @@ public class LightLocalizer {
     alignWithLine();
     moveStraightFor(backwardAdjustment);
     turnBy(90.0);
+    moveStraightFor(-movementOffset);
   }
   
   /**

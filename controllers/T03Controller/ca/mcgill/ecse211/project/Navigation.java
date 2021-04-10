@@ -384,6 +384,9 @@ public class Navigation {
       odometer.printPosition();
 
       /* Step 6: Return to starting point */
+      println("===============================");
+      println("Going to start : "+start);
+      
       cur = getCurrentPoint_feet();
       destTheta = getDestinationAngle(cur, start);
       distance = toMeters(distanceBetween(cur, start));
@@ -510,6 +513,18 @@ public class Navigation {
    * @param corner The starting corner of the robot.
    */
   public static void getToIsland(int corner) {
+    Point startingPoint = getStartingPoint(corner);
+    crossingTunnel(corner);
+  }
+  
+  /**
+   * Given the robots' starting corner, return the actual point of the robots'
+   * starting corner before the robot has localized.
+   * 
+   * @param corner wifi parameter indicating the robots' starting corner.
+   * @return
+   */
+  public static Point getStartingPoint(int corner) {
     Point startingPoint = new Point(-1,-1);
     switch (corner) {
       case(0):
@@ -527,10 +542,10 @@ public class Navigation {
       default:
         errPrintln("Error getting starting corner");
     }
-    crossingTunnel(corner);
+    return startingPoint;
   }
   
-
+  
   
 
   /**
@@ -580,7 +595,7 @@ public class Navigation {
       travelToObstacle(destination);
     }
 
-    double tolerance = 0.5;
+    double tolerance = toFeet(TILE_SIZE);
     if ((roughlySame(startPoint.x, destination.x, tolerance)
         || roughlySame(startPoint.y, destination.y, tolerance))
         ) {
