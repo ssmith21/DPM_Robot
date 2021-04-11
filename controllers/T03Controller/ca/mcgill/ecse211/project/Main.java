@@ -34,6 +34,7 @@ public class Main {
     Point startingPoint = Navigation.getStartingPoint(corner);
     Navigation.moveBackToStart(startingPoint, waypoint(0));
     
+    Movement.beep(5);
 
     System.exit(0);
   }
