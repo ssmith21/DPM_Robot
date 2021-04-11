@@ -26,8 +26,8 @@ public class Main {
     
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
-
-    Navigation.getToIsland(corner);
+    
+    Navigation.crossingTunnel(corner);
     println("Got to island");
     odometer.printPositionInTileLengths();
     Navigation.doLap(waypoints);

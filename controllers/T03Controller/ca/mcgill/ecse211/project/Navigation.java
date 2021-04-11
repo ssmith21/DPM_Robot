@@ -516,17 +516,6 @@ public class Navigation {
   }
   
   /**
-   * Get the starting point of the robot.
-   * @param corner The starting corner of the robot.
-   * @return startingPoint The starting point of the robot.
-   */
-
-  public static void getToIsland(int corner) {
-    Point startingPoint = getStartingPoint(corner);
-    crossingTunnel(corner);
-  }
-  
-  /**
    * Given the robots' starting corner, return the actual point of the robots'
    * starting corner before the robot has localized.
    * 
