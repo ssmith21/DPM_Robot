@@ -392,7 +392,7 @@ public class Navigation {
 
       /* Step 6: Return to starting point */
       println("===============================");
-      println("Going to start : "+start);
+      println("Going to start : " + start);
       
       cur = getCurrentPoint_feet();
       destTheta = getDestinationAngle(cur, start);

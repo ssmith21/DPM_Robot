@@ -130,10 +130,7 @@ public class Movement {
     }
   }
   
-  /**
-   * Halts the robot for a while to allow pausing the simulation to evaluate ultrasonic
-   * localization.
-   */
+
   /**
    * Pause the robot for a certain amount of time.
    * @param time : the amount of time we want to pause for, this value is roughly equal to 1 second.
