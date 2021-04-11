@@ -1,5 +1,6 @@
 # ECSE211 Project: Team 03 - DPM-IS-E-Z-P-Z
 Welcome to group 3's repo!
+![](https://github.com/mcgill-ecse211-w21/project-ecse211_t03/blob/main/Poster.png)
 
 ## Project Description
 The goal of this project is to design and construct a machine that can autonomously navigate to a race track on an island and complete as many laps as possible within a 5 minute period, eventually returning to its starting point.
