@@ -26,7 +26,7 @@ public class Main {
     
     UltrasonicLocalizer.localize();
     LightLocalizer.localize_start();
-    Movement.beep(3);
+    Movement.beep(3); 
     
     Navigation.crossingTunnel(corner);
     println("Got to island");
