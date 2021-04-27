@@ -5,16 +5,6 @@ Welcome to group 3's repo!
 ## Project Description
 The goal of this project is to design and construct a machine that can autonomously navigate to a race track on an island and complete as many laps as possible within a 5 minute period, eventually returning to its starting point.
 
-## Meet the Team
-### Individual efforts
-| Name | Role | Spent Hours |
-| ---- | ---- | --------------: |
-| Sean Smith | Software Lead | 66 |
-| Narry Zendehrooh | Testing Lead | 68 |
-| Marckly Paul | Hardware Lead | 62 |
-| Nikhil Jabesh Moses | Documentation Manager | 58 |
-| Atef Halwai | Project Manager | 64 |
-
 ## Purpose
 The robot will start at one of the four corners of the map. It will then have to localize itself in order to update the odometer with its current position in the map. This part of the project should not be challenging since we already implemented the ultrasonic localization in lab 3. Once the odometer will have the correct coordinates, it will be able to reach the waypoints  given at the beginning of the demonstration. To reach the waypoints the odometer class will be crucial, it will tell the robot its displacement in the x and y coordinates and to which direction its heading. By following the waypoints, the robot will have to make as many laps as possible in the track of the map, and then come back to where it started before reaching the time limit. Through this process, it will have to avoid colliding the other competing robot and the obstacles. We will use an ultrasonic sensor to detect potential obstacles.
 
