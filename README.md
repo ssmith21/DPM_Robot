@@ -41,5 +41,4 @@ The Ultrasonic Localizer class finds the two angles required in order for the ro
 ## Hardware Design
 The hardware components of the design consist of  one EV3 brick, two wheels, a set of legos that constitute the main assembly, two motors for the wheel, two color sensors, one ultrasonic sensor, and one motor for the ultrasonic sensor. The main assembly is the frame that will support all the components of the robot.
 The ultrasonic and the colors sensors will allow the robot to perform ultrasonic and light localization. One limitation that we have to deal with using the ultrasonic sensor is that its range is limited and sometimes it is not able to detect when an obstacle is at the side of the robot. Moreover, the speed at which the ultrasonic sensor takes measure of the forward distance limits what else we can do with the brick since we have to  wait for the sound wave to come back and make a decision. For the color sensor we have to take samples at a precise frequency so that we do not miss when the robot is crossing a black line.
-
-
+![Hardware design](.github/6_hardware.png)
