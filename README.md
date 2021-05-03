@@ -23,6 +23,13 @@ This class is responsible for movement of the robot which has methods for moving
 ### Obstacle Avoidance
 This class uses the ultrasonic sensor to do the wall follower using Bang-Bang method to avoid the obstacle and go back to the path.
 We enter this class when the obstacle is detected in the Navigation class. Then this class will stop the robot and will check both the side (right and left) to decide which side to go. Then it will record the line equation y=mx+b of the path between the current position and the destination waypoint. And finally it will execute the wall follower so that it will go around the obstacle until it joins back the line again. It does so by constantly checking if the robot’s current (x,y) position as shown by the odometer is on the slope y=mx+b. Once the current (x,y) position is on the slope, it will exit the ObstacleAvoidance class, reorient itself towards the destination waypoint, then drive to the point using the Navigation class.
+
+![Localization](.github/2_localization.gif)
+![Tunnel crossing](.github/3_tunnel.gif)
+![Bridge handling](.github/4_bridge_handler.gif)
+![Obstacle avoidance](.github/5_obstacle.gif)
+
+
 ### Navigation
 This class is being used to navigate the robot between different waypoints. It will use the AvoidObstacle class to pass the obstacles.
 The destination points will be passed to the TravelTo method. This method can calculate the minimal angle to turn toward the destination. It also would use the Movement class to move the robot toward the destination. Moreover, it uses the LightLocalizer class to localize the robot at each waypoint. This method helps the robot to cross the tunnel and the bridge. The bulk of the robots' functionality is called from the Navigation class, including obstacle avoidance which is called when the robot detects an obstacle while navigating.
