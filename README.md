@@ -23,21 +23,21 @@ This class is responsible for movement of the robot which has methods for moving
 ### Obstacle Avoidance
 This class uses the ultrasonic sensor to do the wall follower using Bang-Bang method to avoid the obstacle and go back to the path.
 We enter this class when the obstacle is detected in the Navigation class. Then this class will stop the robot and will check both the side (right and left) to decide which side to go. Then it will record the line equation y=mx+b of the path between the current position and the destination waypoint. And finally it will execute the wall follower so that it will go around the obstacle until it joins back the line again. It does so by constantly checking if the robot’s current (x,y) position as shown by the odometer is on the slope y=mx+b. Once the current (x,y) position is on the slope, it will exit the ObstacleAvoidance class, reorient itself towards the destination waypoint, then drive to the point using the Navigation class.
-
-![Localization](.github/2_localization.gif)
-![Tunnel crossing](.github/3_tunnel.gif)
-![Bridge handling](.github/4_bridge_handler.gif)
+#### Here is an example of the robot avoiding an obstacle
 ![Obstacle avoidance](.github/5_obstacle.gif)
-
-
 ### Navigation
 This class is being used to navigate the robot between different waypoints. It will use the AvoidObstacle class to pass the obstacles.
 The destination points will be passed to the TravelTo method. This method can calculate the minimal angle to turn toward the destination. It also would use the Movement class to move the robot toward the destination. Moreover, it uses the LightLocalizer class to localize the robot at each waypoint. This method helps the robot to cross the tunnel and the bridge. The bulk of the robots' functionality is called from the Navigation class, including obstacle avoidance which is called when the robot detects an obstacle while navigating.
+#### Example of 2 navigation functions, tunnel crossing and bridge handling.
+![Tunnel crossing](.github/3_tunnel.gif)
+![Bridge handling](.github/4_bridge_handler.gif)
 ### Light Localization
 This class uses the two color sensors to detect the black line of the tales and does the localization at the beginning and at the each waypoint. This class will be called by the Main class at the beginning and by the Navigation class at every waypoint. Once the robot arrives at the waypoint having travelled along the x or y-axis, it uses the colour sensors to align itself with one of the black lines of the tiles of the squares such that it faces 0, 90, 180 or 270 degrees theta. It then reverses and turns 90 degrees towards the waypoint and drives straight, aligning itself with the line perpendicular to the first line it aligned with. Once this is complete, it turns back 90 degrees the other way, then drives forwards such that the robot is placed directly over the waypoint. This class is extremely useful for localizing at waypoints, and driving accurately in a straight line, using the black lines to correct its' path to ensure that the robot is travelling directly along the x or y-axis.
 ### Ultrasonic Localization
 This class is being used at the beginning to localize the robot using the corner walls.
 The Ultrasonic Localizer class finds the two angles required in order for the robot to adjust itself in the environment. Two methods were designed based on the facing of the robot. When the robot was facing the walls the risingEdge method would be called. Otherwise, the fallingEdge method would be called. In both cases, the robot turned clockwise and counterclockwise to detect the angles. The sampling method was taking 20 samples, and passing them into a filtering process by using the mean value of those samples, as it represents the majority samples rejecting outliers, reducing errors.
+#### Below is an example of the robot localizing in a corner.
+![Localization](.github/2_localization.gif)
 ## Hardware Design
 The hardware components of the design consist of  one EV3 brick, two wheels, a set of legos that constitute the main assembly, two motors for the wheel, two color sensors, one ultrasonic sensor, and one motor for the ultrasonic sensor. The main assembly is the frame that will support all the components of the robot.
 The ultrasonic and the colors sensors will allow the robot to perform ultrasonic and light localization. One limitation that we have to deal with using the ultrasonic sensor is that its range is limited and sometimes it is not able to detect when an obstacle is at the side of the robot. Moreover, the speed at which the ultrasonic sensor takes measure of the forward distance limits what else we can do with the brick since we have to  wait for the sound wave to come back and make a decision. For the color sensor we have to take samples at a precise frequency so that we do not miss when the robot is crossing a black line.
